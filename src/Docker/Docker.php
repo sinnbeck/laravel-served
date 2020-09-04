@@ -63,7 +63,7 @@ class Docker
         $name = 'served_' . config('served.name') . '_';
         // $containers = $this->shell->exec('docker ps --filter "name=served_served" --format "{{json .}}"');
         // $containers = $this->shell->exec('docker ps --filter "name=served_served" --format=\'{{join .Container " , "}}\'');
-        $containers = $this->shell->exec('docker ps --filter "name=' . $name . '" --format "{{.ID}}|{{.Names}}|{{.Image}}|{{.Status}}|{{.Ports}}"');
+        $containers = $this->shell->exec('docker ps --all --filter "name=' . $name . '" --format "{{.ID}}|{{.Names}}|{{.Image}}|{{.Status}}|{{.Ports}}"');
         $formatted = collect(explode("\n", $containers))->filter()->map(function($row) {
             return  explode('|', $row);
         })->reverse();

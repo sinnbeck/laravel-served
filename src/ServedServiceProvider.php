@@ -5,6 +5,8 @@ namespace Sinnbeck\LaravelServed;
 use Illuminate\Support\ServiceProvider;
 use Sinnbeck\LaravelServed\Commands\ServedListCommand;
 use Sinnbeck\LaravelServed\Commands\ServedUpCommand;
+use Sinnbeck\LaravelServed\Commands\ServedStartCommand;
+use Sinnbeck\LaravelServed\Commands\ServedStopCommand;
 use Sinnbeck\LaravelServed\Commands\ServedSshCommand;
 use Sinnbeck\LaravelServed\Commands\ServedTearDownCommand;
 
@@ -38,6 +40,8 @@ class ServedServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 ServedUpCommand::class,
+                ServedStartCommand::class,
+                ServedStopCommand::class,
                 ServedTearDownCommand::class,
                 ServedListCommand::class,
                 ServedSshCommand::class,

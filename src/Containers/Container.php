@@ -28,6 +28,16 @@ abstract class Container
         $this->remove();
     }
 
+    public function start()
+    {
+        $this->shell->exec('docker start ' . $this->makeContainerName());
+    }
+
+    public function stop()
+    {
+        $this->shell->exec('docker stop ' . $this->makeContainerName());
+    }
+
     public function createBuildString()
     {
         $base = 'docker run -d --restart always --network="$network" --name "$container_name"';
