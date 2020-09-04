@@ -41,6 +41,10 @@ class Php extends Image
                 ]);
         }
 
+        $command
+            ->comment('add development php.ini file', true)
+            ->run('mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"');
+
         $modules = $this->modules;
 
         if (config('served.php.xdebug.enabled') && !in_array('xdebug', $modules)) {
@@ -68,8 +72,6 @@ class Php extends Image
         }
 
         $command
-            ->comment('add development php.ini file', true)
-            ->run('mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"')
             ->comment("add a local user with the same uid as the local\nprepare empty composer config directory\nensure user owns its home directory")
             ->arg('uid')
             ->run([

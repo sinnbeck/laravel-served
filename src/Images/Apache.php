@@ -30,7 +30,7 @@ class Apache extends Image
         $command = $this->dockerFileBuilder
             ->from($this->imageName(), $this->imageTag())
             ->env('WEB_PHP_SOCKET', 'served_php:9000')
-            ->env('WEB_DOCUMENT_ROOT', '/var/www/html/public')
+            ->env('WEB_DOCUMENT_ROOT', '/app/public')
             ->env('WEB_PHP_TIMEOUT', '60');
 
         $this->storeDockerfile($command);
@@ -41,10 +41,10 @@ class Apache extends Image
             ->from($this->imageName(), $this->tag)
             ->newLine()
             ->copy('vendor/sinnbeck/laravel-served/src/Services/stubs/my-httpd.conf', '/usr/local/apache2/conf/httpd.conf')
-            //->env('APACHE_DOCUMENT_ROOT', '/var/www/html')
+            //->env('APACHE_DOCUMENT_ROOT', '/app')
             ->env('APACHE_RUN_USER', 'served')
             ->env('APACHE_RUN_GROUP', 'served');
-            //->run('sed -ri -e \'s!/var/www/html!${APACHE_DOCUMENT_ROOT}!g\' /etc/apache2/sites-available/*.conf')
+            //->run('sed -ri -e \'s!/app!${APACHE_DOCUMENT_ROOT}!g\' /etc/apache2/sites-available/*.conf')
             //->run('sed -ri -e \'s!/var/www/!${APACHE_DOCUMENT_ROOT}!g\' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf')
             //->comment('enable mod_rewrite for URL rewrite and mod_headers for .htaccess', true)//
             //->run('a2enmod rewrite headers');
