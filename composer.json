@@ -1,0 +1,38 @@
+{
+    "name": "sinnbeck/laravel-served",
+    "description": "Dockerized version of artisan serve",
+    "keywords": [
+        "laravel",
+        "serve",
+        "docker"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "René Sinnbeck",
+            "email": "rene.sinnbeck@gmail.com"
+        }
+    ],
+    "require": {
+        "laravel/framework": ">=5.4@dev"
+    },
+    "autoload": {
+        "psr-4": {
+            "Sinnbeck\\LaravelServed\\": "src/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.1-dev"
+        },
+        "laravel": {
+            "providers": [
+                "Sinnbeck\\LaravelServed\\ServedServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable",
+    "require-dev": {
+        "symfony/process": "^5.1"
+    }
+}
