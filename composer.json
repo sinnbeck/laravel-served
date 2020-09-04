@@ -4,7 +4,10 @@
     "keywords": [
         "laravel",
         "serve",
-        "docker"
+        "docker",
+        "webserver",
+        "apache",
+        "nginx"
     ],
     "license": "MIT",
     "authors": [
@@ -13,7 +16,9 @@
             "email": "rene.sinnbeck@gmail.com"
         }
     ],
-    "require": {
+    "require": {},
+    "require-dev": {
+        "symfony/process": "^5.1",
         "laravel/framework": ">=6.0"
     },
     "autoload": {
@@ -31,8 +36,6 @@
             ]
         }
     },
-    "minimum-stability": "stable",
-    "require-dev": {
-        "symfony/process": "^5.1"
-    }
+    "minimum-stability": "stable"
+    
 }
