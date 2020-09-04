@@ -115,7 +115,7 @@ abstract class Container
 
     protected function findDockerFile()
     {
-        return $this->storageDirectory() . '/Dockerfile';
+        return $this->storageDirectory() . 'Dockerfile';
     }
 
     //Duplicate code!

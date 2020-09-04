@@ -61,12 +61,10 @@ class Php extends Image
                 ->comment('Adding xdebug', true)
                 ->run([
                     'echo "[xdebug]" >> "$PHP_INI_DIR/conf.d/docker-php-ext-xdebug.ini"',
-                    //                        'echo "xdebug.profiler_enable_trigger = 1" >> "$PHP_INI_DIR/conf.d/docker-php-ext-xdebug.ini"',
                     'echo "xdebug.remote_enable = 1" >> "$PHP_INI_DIR/conf.d/docker-php-ext-xdebug.ini"',
                     'echo "xdebug.remote_port = ' . config('served.php.xdebug.port', 9000) . '" >> "$PHP_INI_DIR/conf.d/docker-php-ext-xdebug.ini"',
                     'echo "xdebug.remote_connect_back = 1" >> "$PHP_INI_DIR/conf.d/docker-php-ext-xdebug.ini"',
                     'echo "xdebug.remote_autostart = 1" >> "$PHP_INI_DIR/conf.d/docker-php-ext-xdebug.ini"',
-                    //                        'echo "xdebug.trace_enable_trigger = 1" >> "$PHP_INI_DIR/conf.d/docker-php-ext-xdebug.ini"',
                 ]);
         }
 

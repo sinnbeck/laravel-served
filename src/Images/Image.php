@@ -113,18 +113,18 @@ abstract class Image
     protected function storeDockerfile(string $content)
     {
         $storagePath = $this->storageDirectory();
-        file_put_contents($storagePath .'/Dockerfile', $content);
+        file_put_contents($storagePath .'Dockerfile', $content);
     }
 
     protected function copyDockerFile($filePath, $targetName)
     {
         $storagePath = $this->storageDirectory();
-        copy($filePath, $storagePath . '/' . $targetName);
+        copy($filePath, $storagePath . $targetName);
     }
 
     protected function findDockerFile()
     {
-        return $this->storageDirectory() . '/Dockerfile';
+        return $this->storageDirectory() . 'Dockerfile';
     }
 
 }

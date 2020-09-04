@@ -15,6 +15,6 @@ trait Storage
             mkdir($storagePath, 0777, true);
         }
 
-        return $storagePath;
+        return $storagePath . '/';
     }
 }
