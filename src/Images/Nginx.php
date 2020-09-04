@@ -30,7 +30,7 @@ class Nginx extends Image
             ->newLine()
             ->comment('Copy in new nginx config')
 //            ->copy('storage/served/nginx/default.conf', '/etc/nginx/conf.d/default.conf');
-            ->copy($this->storageDirectory() . 'nginx.conf', '/etc/nginx/conf.d/default.conf');
+            ->copy($this->storageDirectory(true) . 'default.conf', '/etc/nginx/conf.d/default.conf');
 
         $this->storeDockerfile($command);
         return (string) $command;

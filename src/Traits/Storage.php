@@ -7,12 +7,17 @@ trait Storage
     /**
      * @return string
      */
-    protected function storageDirectory(): string
+    protected function storageDirectory($relative = false): string
     {
-        $storagePath = storage_path('app/served/' . $this->simpleName());
+        $basePath = 'app/served/' . $this->simpleName();
+        $storagePath = storage_path($basePath);
 
         if (!is_dir($storagePath)) {
             mkdir($storagePath, 0777, true);
+        }
+
+        if ($relative) {
+            $storagePath = 'storage/' . $basePath;
         }
 
         return $storagePath . '/';

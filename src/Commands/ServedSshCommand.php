@@ -5,6 +5,7 @@ namespace Sinnbeck\LaravelServed\Commands;
 use Sinnbeck\LaravelServed\Output;
 use Sinnbeck\LaravelServed\Services\Php;
 use Illuminate\Console\Command;
+use Illuminate\Support\Str;
 
 class ServedSshCommand extends Command
 {
@@ -13,7 +14,7 @@ class ServedSshCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'served:ssh';
+    protected $signature = 'served:ssh {service=php}';
 
     /**
      * The console command description.
@@ -37,8 +38,11 @@ class ServedSshCommand extends Command
      *
      * @return int
      */
-    public function handle(Php $php)
+    public function handle()
     {
-        $php->container()->ssh();
+        $serviceName = $this->argument('service');
+        $service = app('Sinnbeck\\LaravelServed\\Services\\' . Str::studly($serviceName));
+
+        $service->container()->ssh();
     }
 }

@@ -73,6 +73,7 @@ class ServedTearDownCommand extends Command
         }
 
         if (!$onlyService) {
+            $this->info(sprintf('Removing network %s ...', $servedName));
             $docker->removeNetwork($servedName);
         }
 

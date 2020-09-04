@@ -40,7 +40,7 @@ abstract class Service
         $namespace = 'Sinnbeck\\LaravelServed\\Images\\';
         return $this->image = app($namespace . class_basename($this));
 
-        $image = config('served.images.' . strtolower($this->name()));
+        $image = config('served.images.' . $this->simpleName());
         // dd(strtolower($this->name()), config('served.images'), $image);
 
         if (!$image) {
@@ -81,6 +81,11 @@ abstract class Service
     public function name()
     {
         return class_basename($this);
+    }
+
+    public function simpleName()
+    {
+        return strtolower($this->name());
     }
 
 }

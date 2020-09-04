@@ -1,12 +1,15 @@
 # Laravel Served
 
-Laravel Served is a docker version of `php artisan serve`. It makes it easy to quickly start a development environment the laravel way (config).
+Laravel Served is a dockerized version of `php artisan serve`. It makes it easy to quickly start a development environment the laravel way (config).
 
 The only things you need to get started is
-* php
-* docker
+* Php (cli)
+* Docker
+* Laravel
 
 It is **not** meant to be a replacement for tools like laradock, but is just meant for starting a quick development environment on smaller projects with few special needs.
+
+>Beware: This package is under active development and can major changes can occur at any point. It is therefor a good idea to read the documentation, and republish the config file after each new version.
 
 ## Installation
 Install the package using composer
@@ -51,11 +54,17 @@ The `container_name` is optional, and will default to php (where you can run art
 
 >Served doesn't actually ssh into the container, but rather just start a bash shell directly. `served:ssh`just sound better and is quick to type.
 
+## Clean up
+It is possible to remove all data set up by served. To do this simply run
+```
+$ php artisan served:teardown
+```
+
 ## Configuration
 While it is possible to just run served without any configuration, it is probably a good idea to configure served for your needs.
 To get started you need to publish the config file.
 ```
-$ php artisan vendor:publish --provider="Sinnbeck\LaravelServed\ServiceProvider"
+$ php artisan vendor:publish --provider="Sinnbeck\LaravelServed\ServedServiceProvider"
 ```
 ### Name
 To avoid naming conflicts between projects, you can define your own name for served configuration. This name will be used when creating network, images and containers. Make sure it is unique between projects!
@@ -124,3 +133,8 @@ Coming soon
 
 ### Redis
 Coming soon
+
+## Todo
+[] Add more images
+[] Find a way to allow user created images
+[] Let served make a proper name if none is set (instead of defaulting to 'served')
