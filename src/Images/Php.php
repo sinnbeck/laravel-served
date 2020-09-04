@@ -53,16 +53,15 @@ class Php extends Image
                 ->copy('/usr/bin/install-php-extensions', '/usr/bin/', 'mlocati/php-extension-installer')
                 ->run('install-php-extensions '. implode(' ', $modules));
 
-
         }
 
-        if (in_array('xdebug', $modules)) {
+        if (in_array('xdebug', $modules) && config('served.php.xdebug.enabled')) {
             $command
                 ->comment('Adding xdebug', true)
                 ->run([
                     'echo "[xdebug]" >> "$PHP_INI_DIR/conf.d/docker-php-ext-xdebug.ini"',
                     'echo "xdebug.remote_enable = 1" >> "$PHP_INI_DIR/conf.d/docker-php-ext-xdebug.ini"',
-                    'echo "xdebug.remote_port = ' . config('served.php.xdebug.port', 9000) . '" >> "$PHP_INI_DIR/conf.d/docker-php-ext-xdebug.ini"',
+                    'echo "xdebug.remote_port = ' . config('served.php.xdebug.port', 9001) . '" >> "$PHP_INI_DIR/conf.d/docker-php-ext-xdebug.ini"',
                     'echo "xdebug.remote_connect_back = 1" >> "$PHP_INI_DIR/conf.d/docker-php-ext-xdebug.ini"',
                     'echo "xdebug.remote_autostart = 1" >> "$PHP_INI_DIR/conf.d/docker-php-ext-xdebug.ini"',
                 ]);

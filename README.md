@@ -82,12 +82,11 @@ Here you may specify how php should be built. Any options left blank or removed 
         'modules' => [
             'pdo_mysql',
             'zip',
-            'xdebug',
         ],
         'npm' => true,
         'xdebug' => [
             'enabled' => true,
-            'port' => 9000,
+            'port' => 9001,
         ],
     ],
 ```

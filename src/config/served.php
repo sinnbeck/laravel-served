@@ -30,12 +30,11 @@ return [
         'modules' => [
             'pdo_mysql',
             'zip',
-            'xdebug',
         ],
         'npm' => false,
         'xdebug' => [
-            'enabled' => false,
-            'port' => 9000,
+            'enabled' => true,
+            'port' => 9001,
         ],
     ],
     'web' => [
