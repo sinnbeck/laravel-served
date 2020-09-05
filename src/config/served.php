@@ -30,8 +30,9 @@ return [
         'modules' => [
             'pdo_mysql',
             'zip',
+            'bcmath'
         ],
-        'npm' => false,
+        'npm' => true,
         'xdebug' => [
             'enabled' => true,
             'port' => 9001,

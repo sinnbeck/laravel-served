@@ -42,7 +42,7 @@ class DockerFileBuilder
     {
 
         if (is_array($command)) {
-            $command = \implode(' \\'."\n    && ", $command);
+            $command = implode(' \\'."\n    && ", $command);
         }
 
         $this->fileStructure[] = sprintf('RUN %s', $command);
@@ -66,6 +66,12 @@ class DockerFileBuilder
         $from = $from ? ' --from='.$from : null;
         $this->fileStructure[] = sprintf('COPY%3$s %1$s %2$s', $source, $target, $from);
 
+        return $this;
+    }
+
+    public function workdir($workdir)
+    {
+        $this->fileStructure[] = sprintf('WORKDIR %s', $workdir);
         return $this;
     }
 

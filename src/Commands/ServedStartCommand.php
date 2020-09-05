@@ -4,7 +4,7 @@ namespace Sinnbeck\LaravelServed\Commands;
 
 use Sinnbeck\LaravelServed\Docker\Docker;
 use Illuminate\Console\Command;
-use Sinnbeck\LaravelServed\Services\Services;
+use Sinnbeck\LaravelServed\ServiceManager;
 use Sinnbeck\LaravelServed\Commands\Traits\DockerCheck;
 
 class ServedStartCommand extends Command
@@ -39,7 +39,7 @@ class ServedStartCommand extends Command
      *
      * @return int
      */
-    public function handle(Docker $docker, Services $services)
+    public function handle(Docker $docker, ServiceManager $manager)
     {
         $this->checkPrequisites($docker);
         $servedName = config('served.name');
@@ -47,20 +47,19 @@ class ServedStartCommand extends Command
 
         $onlyService = $this->argument('service');
 
-        $serviceList = $services->prepareServiceList();
+        $serviceList = $manager->loadServices();
 
         foreach ($serviceList as $service) {
-            if ($onlyService && $service->simpleName() !== $onlyService) {
+            if ($onlyService && $service->name() !== $onlyService) {
                 continue;
             }
-            $this->info(sprintf('Starting %s (%s) ...', $service->image()->name(), $service->image()->imageTag()));
+            $this->info(sprintf('Starting %s (%s) ...', $service->name(), $service->imageName()));
             $service->container()->start();
 
         }
-
+        $this->line('');
         $this->info('Laravel has been served');
-        $this->line('Visit the development server at: http://localhost:' . $serviceList[1]->container()->port());
-
+        $this->line('Visit the development server at: http://localhost:' . $manager->web()->container()->port());
         return 0;
 
 

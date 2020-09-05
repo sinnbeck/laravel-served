@@ -5,16 +5,20 @@ namespace Sinnbeck\LaravelServed\Images;
 use Sinnbeck\LaravelServed\Shell\Shell;
 use Sinnbeck\LaravelServed\Traits\Storage;
 use Sinnbeck\LaravelServed\Docker\DockerFileBuilder;
-use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
-abstract class Image
+abstract class Image implements ImageInterface
 {
     use Storage;
+
+    protected $name;
+    protected $config;
+
     /**
      * @var \Sinnbeck\LaravelServed\Shell\Shell
      */
     protected $shell;
+
     /**
      * @var \Sinnbeck\LaravelServed\Docker\DockerFileBuilder
      */
@@ -26,16 +30,40 @@ abstract class Image
     protected $buildCommand = '';
     protected $buildFlags = ' --no-cache';
 
-    public function __construct(Shell $shell, DockerFileBuilder $dockerFileBuilder)
+    public function __construct($name, $config, Shell $shell)
     {
+        $this->config = $config;
         $this->shell = $shell;
-        $this->dockerFileBuilder = $dockerFileBuilder;
+        $this->dockerFileBuilder = app(DockerFileBuilder::class);
+        $this->name = $name;
+        $this->parseConfig();
     }
 
-    public function build($noCache = false)
+    public function prepareBuild(): self
     {
-        $this->prepareConfigFiles();
-        $this->generateDockerFile();
+        $this->prepareConfFiles();
+        $dockerFile = $this->writeDockerFile();
+        $this->storeDockerfile($dockerFile);
+
+        return $this;
+    }
+
+    public function parseConfig()
+    {
+        foreach ($this->config as $key => $value) {
+            if ($key == 'version') {
+                $this->setImageTag($value);
+            }
+
+            if ($key == 'alias') {
+                $this->setAlias($value);
+            }
+
+        }
+    }
+
+    public function build($noCache = false): void
+    {
         $this->shell->run($this->buildCommand . ($noCache ? $this->buildFlags : ''), $this->prepareEnv());
     }
 
@@ -44,12 +72,7 @@ abstract class Image
         return [];
     }
 
-    protected function prepareConfigFiles()
-    {
-        //
-    }
-
-    protected function generateDockerFile()
+    protected function prepareConfFiles()
     {
         //
     }
@@ -62,7 +85,7 @@ abstract class Image
         } catch (ProcessFailedException $e) {
             return false;
         }
-//        return !!$this->shell->exec(sprintf('docker images %s -q', $this->makeImageName()));
+
     }
 
     public function remove()
@@ -72,7 +95,7 @@ abstract class Image
 
     protected function makeImageName()
     {
-        return sprintf('served/%s_%s', $this->projectName(), $this->serviceName);
+        return sprintf('served/%s_%s', $this->projectName(), $this->name());
     }
 
     public function imageName()
@@ -116,7 +139,7 @@ abstract class Image
 
     public function name()
     {
-        return class_basename($this);
+        return $this->name;
     }
 
     protected function storeDockerfile(string $content)

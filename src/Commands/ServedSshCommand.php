@@ -2,10 +2,8 @@
 
 namespace Sinnbeck\LaravelServed\Commands;
 
-use Sinnbeck\LaravelServed\Output;
-use Sinnbeck\LaravelServed\Services\Php;
+use Sinnbeck\LaravelServed\ServiceManager;
 use Illuminate\Console\Command;
-use Illuminate\Support\Str;
 
 class ServedSshCommand extends Command
 {
@@ -38,11 +36,13 @@ class ServedSshCommand extends Command
      *
      * @return int
      */
-    public function handle()
+    public function handle(ServiceManager $manager)
     {
         $serviceName = $this->argument('service');
-        $service = app('Sinnbeck\\LaravelServed\\Services\\' . Str::studly($serviceName));
+        $service = $manager->resolveByName($serviceName);
 
         $service->container()->ssh();
+
+        return 0;
     }
 }

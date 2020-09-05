@@ -2,14 +2,13 @@
 
 namespace Sinnbeck\LaravelServed\Images;
 
-class Nginx extends Image
+class NginxImage extends Image
 {
     protected $image = 'nginx';
     protected $tag = '1.19';
-    protected $buildCommand = 'docker build -t "$imagename" --build-arg uid="$uid" . -f "$dockerfile"';
-    protected $serviceName = 'web';
+    protected $buildCommand = 'docker build -t "$imagename" . -f "$dockerfile"';
 
-    protected function prepareConfigFiles()
+    protected function prepareConfFiles()
     {
         $this->copyDockerFile(__DIR__.'/stubs/nginx.conf', 'default.conf');
     }
@@ -23,7 +22,7 @@ class Nginx extends Image
         ];
     }
 
-    public function generateDockerFile(): string
+    public function writeDockerFile(): string
     {
         $command = $this->dockerFileBuilder
             ->from($this->imageName(), $this->imageTag())
@@ -32,7 +31,6 @@ class Nginx extends Image
 //            ->copy('storage/served/nginx/default.conf', '/etc/nginx/conf.d/default.conf');
             ->copy($this->storageDirectory(true) . 'default.conf', '/etc/nginx/conf.d/default.conf');
 
-        $this->storeDockerfile($command);
         return (string) $command;
     }
 

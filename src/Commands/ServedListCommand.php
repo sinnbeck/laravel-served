@@ -4,8 +4,6 @@ namespace Sinnbeck\LaravelServed\Commands;
 
 use Sinnbeck\LaravelServed\Docker\Docker;
 use Illuminate\Console\Command;
-use Sinnbeck\LaravelServed\Services\Services;
-use Sinnbeck\LaravelServed\Docker\DockerFileBuilder;
 use Sinnbeck\LaravelServed\Commands\Traits\DockerCheck;
 
 class ServedListCommand extends Command
@@ -40,17 +38,14 @@ class ServedListCommand extends Command
      *
      * @return int
      */
-    public function handle(Docker $docker, Services $services)
+    public function handle(Docker $docker)
     {
         //Done: Check if network exists / create it
         $this->checkPrequisites($docker);
-        $servedName = config('served.name');
-
-        $serviceList = $services->prepareServiceList();
-
         $containers = $docker->listContainers();
 
         $this->table($containers->slice(0, 1)->toArray(), $containers->slice(1)->toArray());
 
+        return 0;
     }
 }

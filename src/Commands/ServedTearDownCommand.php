@@ -4,8 +4,7 @@ namespace Sinnbeck\LaravelServed\Commands;
 
 use Sinnbeck\LaravelServed\Docker\Docker;
 use Illuminate\Console\Command;
-use Sinnbeck\LaravelServed\Services\Services;
-use Sinnbeck\LaravelServed\Docker\DockerFileBuilder;
+use Sinnbeck\LaravelServed\ServiceManager;
 use Sinnbeck\LaravelServed\Commands\Traits\DockerCheck;
 
 class ServedTearDownCommand extends Command
@@ -40,7 +39,7 @@ class ServedTearDownCommand extends Command
      *
      * @return int
      */
-    public function handle(Docker $docker, Services $services)
+    public function handle(Docker $docker, ServiceManager $manager)
     {
         //Done: Check if network exists / create it
         $this->checkPrequisites($docker);
@@ -48,25 +47,25 @@ class ServedTearDownCommand extends Command
 
         $onlyService = $this->argument('service');
 
-        $serviceList = $services->prepareServiceList();
+        $serviceList = $manager->loadServices();
 
         foreach ($serviceList as $service) {
-            if ($onlyService && $service->simpleName() !== $onlyService) {
+            if ($onlyService && $service->name() !== $onlyService) {
                 continue;
             }
 
-            $this->info(sprintf('Removing container for %s (%s) ...', $service->name(), $service->image()->imageTag()));
+            $this->info(sprintf('Removing container for %s (%s) ...', $service->name(), $service->imageName()));
 
             $service->container()->remove();
 
         }
 
         foreach ($serviceList as $service) {
-            if ($onlyService && $service->simpleName() !== $onlyService) {
+            if ($onlyService && $service->name() !== $onlyService) {
                 continue;
             }
 
-            $this->info(sprintf('Removing image for %s (%s) ...', $service->name(), $service->image()->imageTag()));
+            $this->info(sprintf('Removing image for %s (%s) ...', $service->name(), $service->imageName()));
 
             $service->image()->remove();
 

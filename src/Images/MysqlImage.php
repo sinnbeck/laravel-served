@@ -3,12 +3,11 @@
 
 namespace Sinnbeck\LaravelServed\Images;
 
-class Mysql extends Image
+class MysqlImage extends Image
 {
     protected $image = 'mysql';
     protected $tag = '5.7';
-    protected $buildCommand = 'docker build -t "$imagename" --build-arg uid="$uid" . -f "$dockerfile"';
-    protected $serviceName = 'mysql';
+    protected $buildCommand = 'docker build -t "$imagename" . -f "$dockerfile"';
 
     protected function prepareEnv()
     {
@@ -19,7 +18,7 @@ class Mysql extends Image
         ];
     }
 
-    protected function generateDockerFile(): string
+    public function writeDockerFile(): string
     {
         $command = $this->dockerFileBuilder
             ->from($this->imageName(), $this->imageTag())
@@ -30,7 +29,6 @@ class Mysql extends Image
             ->env('MYSQL_USER', 'laravel')
             ->env('MYSQL_PASSWORD', 'password');
 
-        $this->storeDockerfile($command);
         return (string) $command;
     }
 

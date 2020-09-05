@@ -4,7 +4,7 @@ namespace Sinnbeck\LaravelServed\Commands;
 
 use Sinnbeck\LaravelServed\Docker\Docker;
 use Illuminate\Console\Command;
-use Sinnbeck\LaravelServed\Services\Services;
+use Sinnbeck\LaravelServed\ServiceManager;
 use Sinnbeck\LaravelServed\Commands\Traits\DockerCheck;
 
 class ServedUpCommand extends Command
@@ -39,7 +39,7 @@ class ServedUpCommand extends Command
      *
      * @return int
      */
-    public function handle(Docker $docker, Services $services)
+    public function handle(Docker $docker, ServiceManager $manager)
     {
         $this->checkPrequisites($docker);
         $servedName = config('served.name');
@@ -48,33 +48,31 @@ class ServedUpCommand extends Command
 
         $onlyService = $this->argument('service');
         $noCache = $this->option('no-cache');
-
-        $serviceList = $services->prepareServiceList();
+        $serviceList = $manager->loadServices();
 
         foreach ($serviceList as $service) {
-            if ($onlyService && $service->simpleName() !== $onlyService) {
+            if ($onlyService && $service->name() !== $onlyService) {
                 continue;
             }
-            $this->info(sprintf('Building %s (%s) ...', $service->image()->name(), $service->image()->imageTag()));
-            $service->image()->build($noCache);
 
+            $this->info(sprintf('Building %s (%s) ...', $service->name(), $service->imageName()));
+            $service->build($noCache);
 
         }
 
         foreach ($serviceList as $service) {
-            if ($onlyService && $service->simpleName() !== $onlyService) {
+            if ($onlyService && $service->name() !== $onlyService) {
                 continue;
             }
-            $this->info(sprintf('Starting %s (%s) ...', $service->image()->name(), $service->image()->imageTag()));
-            $service->container()->run();
+            $this->info(sprintf('Starting %s (%s) ...', $service->name(), $service->imageName()));
+            $service->run();
 
         }
 
         $this->info('Laravel has been served');
-        $this->line('Visit the development server at: http://localhost:' . $serviceList[1]->container()->port());
+        $this->line('Visit the development server at: http://localhost:' . $manager->web()->container()->port());
 
         return 0;
-
 
     }
 }

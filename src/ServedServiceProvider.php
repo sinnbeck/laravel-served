@@ -23,7 +23,6 @@ class ServedServiceProvider extends ServiceProvider
             __DIR__.'/config/served.php', 'served'
         );
 
-        $this->app->singleton('output', Output::class);
     }
 
     /**
@@ -47,5 +46,9 @@ class ServedServiceProvider extends ServiceProvider
                 ServedSshCommand::class,
             ]);
         }
+
+        //$this->app->singleton('served', function () {
+        //    return new ServiceManager(app(Shell::class));
+        //});
     }
 }

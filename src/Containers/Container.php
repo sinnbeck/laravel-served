@@ -4,7 +4,6 @@ namespace Sinnbeck\LaravelServed\Containers;
 
 use Sinnbeck\LaravelServed\Shell\Shell;
 use Sinnbeck\LaravelServed\Traits\Storage;
-use Sinnbeck\LaravelServed\Docker\DockerFileBuilder;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
@@ -12,20 +11,42 @@ abstract class Container
 {
     use Storage;
 
+    protected $name;
+    protected $config;
     /**
      * @var \Sinnbeck\LaravelServed\Shell\Shell
      */
     protected $shell;
 
-    public function __construct(Shell $shell, DockerFileBuilder $dockerFileBuilder)
+    public function __construct($name, $config, Shell $shell)
     {
+        $this->name = $name;
+        $this->config = $config;
         $this->shell = $shell;
-        $this->dockerFileBuilder = $dockerFileBuilder;
+
+        $this->parseConfig();
+    }
+
+    public function prepare(): self
+    {
+        $this->remove();
+
+        return $this;
     }
 
     public function run()
     {
-        $this->remove();
+        //
+    }
+
+    public function parseConfig()
+    {
+        foreach ($this->config as $key => $value) {
+            if ($key == 'port') {
+                $this->setPort($value);
+            }
+
+        }
     }
 
     public function start()
@@ -38,27 +59,7 @@ abstract class Container
         $this->shell->exec('docker stop ' . $this->makeContainerName());
     }
 
-    public function createBuildString()
-    {
-        $base = 'docker run -d --restart always --network="$network" --name "$container_name"';
-
-        if ($this->port) {
-            $appends[] = '-p "$port":3306';
-        }
-
-        if ($this->alias) {
-            $appends[] = '--network-alias "$alias"';
-        }
-
-        if ($this->volumes) {
-            // foreach ($volues as $)
-            $appends[] = '-v ' . implode(' ', $this->volumes);
-        }
-
-        $final = $base . implode(' ', $appends) .  ' "$image_name"';
-    }
-
-    protected function makeEnv()
+    protected function env()
     {
         $baseEnv = [
             'network' => $this->projectName(),
@@ -95,7 +96,7 @@ abstract class Container
 
     protected function makeContainerName()
     {
-        return sprintf('served_%s_%s', $this->projectName(), $this->serviceName());
+        return sprintf('served_%s_%s', $this->projectName(), $this->name());
     }
 
     public function setPort($port)
@@ -105,7 +106,7 @@ abstract class Container
 
         }
 
-        return $port;
+        return $this;
     }
 
     public function port()
@@ -118,9 +119,9 @@ abstract class Container
         return config('served.name');
     }
 
-    public function serviceName()
+    public function name()
     {
-        return strtolower(class_basename($this));
+        return $this->name;
     }
 
     protected function findDockerFile()
@@ -131,7 +132,7 @@ abstract class Container
     //Duplicate code!
     protected function makeImageName()
     {
-        return sprintf('served/%s_%s', $this->projectName(), $this->serviceName());
+        return sprintf('served/%s_%s', $this->projectName(), $this->name());
     }
 
 }

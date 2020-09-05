@@ -9,7 +9,7 @@ trait Storage
      */
     protected function storageDirectory($relative = false): string
     {
-        $basePath = 'app/served/' . $this->simpleName();
+        $basePath = 'app/served/' . $this->name();
         $storagePath = storage_path($basePath);
 
         if (!is_dir($storagePath)) {
