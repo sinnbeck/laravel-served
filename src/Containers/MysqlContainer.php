@@ -10,7 +10,7 @@ class MysqlContainer extends Container
 
     public function run()
     {
-        $this->shell->run('docker run -d --restart always --network="$network" --name "$container_name" --network-alias="$alias" -p "$port":3306 -v mysql:/var/lib/mysql/ "$image_name"', $this->env());
+        $this->shell->run('docker run -d --restart always --network="$network" --name "$container_name" --network-alias="$alias" -p "$port":3306 -v "$volume":/var/lib/mysql/ "$image_name"', $this->env());
     }
 
     protected function env(): array
@@ -20,7 +20,8 @@ class MysqlContainer extends Container
             'container_name' => $this->makeContainerName(),
             'image_name' => $this->makeImageName(),
             'port' => $this->port(),
-            'alias' => $this->name() . '_ ' . $this->alias,
+            'alias' => $this->name(),
+            'volume' => $this->name() . '_ ' . $this->alias
         ];
     }
 
