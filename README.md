@@ -83,7 +83,7 @@ Here you may specify how php should be built. Any options left blank or removed 
             'pdo_mysql',
             'zip',
         ],
-        'npm' => true,
+        'npm' => true, //enable or disable npm in build
         'xdebug' => [
             'enabled' => true,
             'port' => 9001,
@@ -110,7 +110,7 @@ Served currently supports nginx and apache. Simply the type to the servertype yo
 ```
 
 ## Extras
-Here you can define extra images that you wish to run. The array key is used as name, meaning it is possible to run the same service more than once, with different names (eg. two mysql instances)
+Here you can define extra images that you wish to run. The array key is used as name, meaning it is possible to run the same service more than once, with different names (eg. two mysql instances).
 
 The current supported images are:
 
@@ -140,3 +140,4 @@ Coming soon
 - [ ] Handle volumes!!
 - [ ] Handle upgrades/downgrades of images
 - [ ] Pass cli output to services to allow direct interaction
+- [ ] Removal of volumes
