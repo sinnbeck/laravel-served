@@ -134,6 +134,9 @@ Coming soon
 Coming soon
 
 ## Todo
-[] Add more images
-[] Find a way to allow user created images
-[] Let served make a proper name if none is set (instead of defaulting to 'served')
+- [ ] Add more images
+- [ ] Find a way to allow user created services
+- [ ] Let served make a proper name if none is set (instead of defaulting to 'served')
+- [ ] Handle volumes!!
+- [ ] Handle upgrades/downgrades of images
+- [ ] Pass cli output to services to allow direct interaction
