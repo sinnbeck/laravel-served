@@ -22,6 +22,7 @@ class Services
 
             $class
                 ->image()
+                ->setAlias($item['hostname'] ?? null)
                 ->setImageTag($item['version'] ?? null);
 
             if (isset($item['port'])) {

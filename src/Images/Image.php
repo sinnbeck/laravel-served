@@ -80,12 +80,12 @@ abstract class Image
         return sprintf('%s/%s', $this->library, $this->image);
     }
 
-    public function imageTag()
+    public function imageTag(): string
     {
         return sprintf('%s%s', $this->tag, $this->tagAddition);
     }
 
-    public function setImageTag($tag)
+    public function setImageTag($tag): self
     {
         if ($tag) {
             $this->tag = $tag;
@@ -95,7 +95,16 @@ abstract class Image
         return $this;
     }
 
-    protected function projectName()
+    public function setAlias($alias): self
+    {
+        if ($alias) {
+            $this->alias = $alias;
+        }
+
+        return $this;
+    }
+
+    protected function projectName(): string
     {
         return config('served.name');
     }

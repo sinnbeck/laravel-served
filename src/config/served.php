@@ -51,7 +51,7 @@ return [
             'version' => '5.7',
             'port' => 3306,
             'root_password' => 'password',
-            'hostname' => 'mysql', //Must be a string!
+            'hostname' => 'mysql', //Must be a string and be unique!
             'database' => 'laravel',
             'username' => 'laravel',
             'password' => 'password',
