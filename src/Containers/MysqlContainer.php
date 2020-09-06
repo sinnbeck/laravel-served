@@ -21,7 +21,7 @@ class MysqlContainer extends Container
             'image_name' => $this->makeImageName(),
             'port' => $this->port(),
             'alias' => $this->name(),
-            'volume' => $this->name() . '_ ' . $this->alias
+            'volume' => $this->name() . '_' . $this->alias
         ];
     }
 
