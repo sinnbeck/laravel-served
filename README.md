@@ -141,3 +141,4 @@ Coming soon
 - [ ] Handle upgrades/downgrades of images
 - [ ] Pass cli output to services to allow direct interaction
 - [ ] Removal of volumes
+- [ ] Test on other platforms than linux (Ubuntu)
