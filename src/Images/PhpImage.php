@@ -9,13 +9,13 @@ class PhpImage extends Image
     protected $image = 'php';
     protected $tag = '7.4';
     protected $tagAddition = '-fpm';
-    protected $buildCommand = 'docker build -t "${:imagename}" --build-arg uid="$uid" . -f "${:dockerfile}"';
+    protected $buildCommand = 'docker build -t "${:imagename}" --build-arg uid="${:uid}" . -f "${:dockerfile}"';
 
     protected function prepareEnv()
     {
         return [
             'imagename' => $this->makeImageName(),
-            'uid' => getmyuid() == 1 ? 1000 : getmyuid(),
+            'uid' => getmyuid() <= 1 ? 1000 : getmyuid(),
             'dockerfile' => $this->findDockerFile(),
         ];
     }
