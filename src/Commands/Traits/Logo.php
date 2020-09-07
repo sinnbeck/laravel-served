@@ -1,10 +1,4 @@
 <?php
-/**
- * User: rene
- * Date: 9/7/20
- * Time: 8:38 AM
- * Mail: rs@aalund.com
- */
 
 namespace Sinnbeck\LaravelServed\Commands\Traits;
 

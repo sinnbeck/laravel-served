@@ -5,13 +5,13 @@ namespace Sinnbeck\LaravelServed\Commands;
 use Sinnbeck\LaravelServed\Docker\Docker;
 use Illuminate\Console\Command;
 use Sinnbeck\LaravelServed\ServiceManager;
-use Sinnbeck\LaravelServed\Commands\Traits\Logo;
 use Sinnbeck\LaravelServed\Commands\Traits\DockerCheck;
+use Sinnbeck\LaravelServed\Commands\Traits\RunningConfig;
 
 class ServedStartCommand extends Command
 {
     use DockerCheck,
-        Logo;
+        RunningConfig;
     /**
      * The name and signature of the console command.
      *
@@ -60,9 +60,7 @@ class ServedStartCommand extends Command
 
         }
         $this->line('');
-        $this->line('Laravel has been', 'fg=blue');
-        $this->drawLogo();
-        $this->line('Visit the development server at: http://localhost:' . $manager->web()->container()->port());
+        $this->servedRunning($manager);
         return 0;
 
 
