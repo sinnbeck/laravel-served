@@ -137,11 +137,12 @@ Coming soon
 Coming soon
 
 ## Todo
+- [ ] Testing!
 - [ ] Add more images
-- [ ] Find a way to allow user created services
+- [ ] Allow user created services
 - [ ] Let served make a proper name if none is set (instead of defaulting to 'served')
-- [ ] Handle volumes!!
+- [ ] Handle setting/adding volumes
+- [ ] Handle removal of volumes
 - [ ] Handle upgrades/downgrades of images
-- [ ] Pass cli output to services to allow direct interaction
-- [ ] Removal of volumes
+- [ ] Pass cli output interface to other classes to allow outputting to cli from them
 - [ ] Test on other platforms than linux (Ubuntu)
