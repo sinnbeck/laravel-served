@@ -5,6 +5,7 @@ namespace Sinnbeck\LaravelServed\Docker;
 use Sinnbeck\LaravelServed\Shell\Shell;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Process\Exception\ProcessFailedException;
+use Sinnbeck\LaravelServed\Exceptions\DockerNotRunningException;
 use Sinnbeck\LaravelServed\Exceptions\DockerNotInstalledException;
 
 class Docker
@@ -20,7 +21,7 @@ class Docker
         $this->shell = $shell;
     }
 
-    public function verifyDockerIsInstalled()
+    public function verifyDockerIsInstalled(): void
     {
         try {
             $this->version();
@@ -30,10 +31,14 @@ class Docker
         }
     }
 
-    public function verifyDockerDemonIsRunning(): bool
+    public function verifyDockerDemonIsRunning(): void
     {
-        return true; //Todo: find a proper way to handle this on other systems!
-//        return $this->shell->exec('systemctl is-active docker') === 'active';
+        try {
+            $this->shell->exec('docker info');
+
+        } catch(ProcessFailedException $e) {
+            throw new DockerNotRunningException('Docker isn\'t running');
+        }
     }
 
     public function version()
