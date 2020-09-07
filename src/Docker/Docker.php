@@ -32,12 +32,13 @@ class Docker
 
     public function verifyDockerDemonIsRunning(): bool
     {
-        return $this->shell->exec('systemctl is-active docker') === 'active';
+        return true; //Todo: find a proper way to handle this on other systems!
+//        return $this->shell->exec('systemctl is-active docker') === 'active';
     }
 
     public function version()
     {
-        return $this->shell->exec('docker version --format=\'{{json .Client.Version}}\' 2>&1');
+        return $this->shell->exec('docker version --format="{{json .Client.Version}}"');
     }
 
     public function ensureNetworkExists($name)
@@ -61,8 +62,6 @@ class Docker
     public function listContainers()
     {
         $name = 'served_' . config('served.name') . '_';
-        // $containers = $this->shell->exec('docker ps --filter "name=served_served" --format "{{json .}}"');
-        // $containers = $this->shell->exec('docker ps --filter "name=served_served" --format=\'{{join .Container " , "}}\'');
         $containers = $this->shell->exec('docker ps --all --filter "name=' . $name . '" --format "{{.ID}}|{{.Names}}|{{.Image}}|{{.Status}}|{{.Ports}}"');
         $formatted = collect(explode("\n", $containers))->filter()->map(function($row) {
             return  explode('|', $row);

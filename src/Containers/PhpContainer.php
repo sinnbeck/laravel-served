@@ -29,7 +29,7 @@ class PhpContainer extends Container
         }
 
         return collect($volumes)->map(function ($item) {
-            return '-v \'' . $item . '\'';
+            return '-v "' . $item . '"';
         })->implode(' ');
     }
 

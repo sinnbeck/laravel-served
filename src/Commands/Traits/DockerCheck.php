@@ -2,11 +2,19 @@
 
 namespace Sinnbeck\LaravelServed\Commands\Traits;
 
+use Sinnbeck\LaravelServed\Docker\Docker;
+use Sinnbeck\LaravelServed\Exceptions\DockerNotInstalledException;
+
 trait DockerCheck
 {
-    protected function checkPrequisites($docker)
+    protected function checkPrerequisites(Docker $docker)
     {
-        $docker->verifyDockerIsInstalled();
+        try {
+            $docker->verifyDockerIsInstalled();
+
+        } catch (DockerNotInstalledException $e) {
+            $this->error('Docker is not installed!');
+        }
 
         $docker->verifyDockerDemonIsRunning();
     }
