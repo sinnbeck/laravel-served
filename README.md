@@ -115,13 +115,16 @@ Here you can define extra images that you wish to run. The array key is used as 
 The current supported images are:
 
 ### Mysql
+Port is used for when connecting to mysql from outside of laravel. 
+Eg. 127.0.0.1:3306. 
+
+To connect to the database from laravel you need to use the config key (in the example that would be `mysql`) as hostname. The port is the default for mysql (3306) and not the one specified in the config.
 ```
 'mysql' => [
             'service' => 'mysql',
             'version' => '5.7',
             'port' => 3306,
             'root_password' => 'password',
-            'hostname' => 'mysql', //Must be a string!
             'database' => 'laravel',
             'username' => 'laravel',
             'password' => 'password',
