@@ -44,13 +44,13 @@ class Docker
     public function ensureNetworkExists($name)
     {
         try {
-           $this->shell->exec('docker network inspect "$name"', ['name' => $name]);
+           $this->shell->exec('docker network inspect "${:name}"', ['name' => $name]);
 
         }
         catch (ProcessFailedException $e) {
             //Make network
 
-            $this->shell->exec('docker network create "$name"', ['name' => $name]);
+            $this->shell->exec('docker network create "${:name}"', ['name' => $name]);
         }
     }
 

@@ -87,7 +87,7 @@ abstract class Container
 
     public function ssh()
     {
-        $process = Process::fromShellCommandline('docker exec -ti "$container" bash');
+        $process = Process::fromShellCommandline('docker exec -ti "${:container}" bash');
         $process->setTimeout(null);
         $process->setTty(true);
 
