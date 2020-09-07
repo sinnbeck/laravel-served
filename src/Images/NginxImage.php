@@ -6,7 +6,7 @@ class NginxImage extends Image
 {
     protected $image = 'nginx';
     protected $tag = '1.19';
-    protected $buildCommand = 'docker build -t "$imagename" . -f "$dockerfile"';
+    protected $buildCommand = 'docker build -t "${:imagename}" . -f "${:dockerfile}"';
 
     protected function prepareConfFiles()
     {

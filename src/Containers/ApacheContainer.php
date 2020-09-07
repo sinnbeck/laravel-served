@@ -8,7 +8,7 @@ class ApacheContainer extends Container
 
     public function run()
     {
-        $this->shell->run('docker run -d --restart always --network="$network" --name "$container_name" -p "$port":80 -v "$PWD":/app "$image_name"', $this->env());
+        $this->shell->run('docker run -d --restart always --network="${:network}" --name "${:container_name}" -p "${:port}":80 -v "$PWD":/app "${:image_name}"', $this->env());
     }
 
     protected function env(): array

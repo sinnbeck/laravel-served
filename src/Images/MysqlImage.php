@@ -7,7 +7,7 @@ class MysqlImage extends Image
 {
     protected $image = 'mysql';
     protected $tag = '5.7';
-    protected $buildCommand = 'docker build -t "$imagename" . -f "$dockerfile"';
+    protected $buildCommand = 'docker build -t "${:imagename}" . -f "${:dockerfile}"';
 
     protected function prepareEnv()
     {

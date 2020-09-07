@@ -8,7 +8,7 @@ class ApacheImage extends Image
     protected $image = 'apache';
     protected $tag = 'latest';
 
-    protected $buildCommand = 'docker build -t "$imagename" . -f "$dockerfile"';
+    protected $buildCommand = 'docker build -t  "${:imagename}" . -f "${:dockerfile}"';
 
     protected function prepareConfFiles()
     {
