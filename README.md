@@ -14,7 +14,7 @@ It is **not** meant to be a replacement for tools like laradock, but is just mea
 ## Installation
 Install the package using composer
 ```
-$ composer require sinnbeck/laravel-served
+$ composer require sinnbeck/laravel-served --dev
 ```
 
 ## Running for the first time
