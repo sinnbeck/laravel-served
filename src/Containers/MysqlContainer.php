@@ -3,6 +3,8 @@
 
 namespace Sinnbeck\LaravelServed\Containers;
 
+use Illuminate\Support\Arr;
+
 class MysqlContainer extends Container
 {
     protected $port = '3306';
@@ -21,8 +23,17 @@ class MysqlContainer extends Container
             'image_name' => $this->makeImageName(),
             'port' => $this->port(),
             'alias' => $this->name(),
-            'volume' => $this->name() . '_' . $this->alias
+            'volume' => $this->volume(),
         ];
+    }
+
+    protected function volume()
+    {
+        if ($volume = Arr::get($this->config, 'volume')) {
+            return $volume;
+        }
+
+        return $this->projectName() . '_' . $this->name();
     }
 
 }
