@@ -4,11 +4,13 @@ namespace Sinnbeck\LaravelServed\Commands;
 
 use Sinnbeck\LaravelServed\Docker\Docker;
 use Illuminate\Console\Command;
+use Sinnbeck\LaravelServed\Commands\Traits\Logo;
 use Sinnbeck\LaravelServed\Commands\Traits\DockerCheck;
 
 class ServedListCommand extends Command
 {
-    use DockerCheck;
+    use DockerCheck,
+        Logo;
     /**
      * The name and signature of the console command.
      *
@@ -41,9 +43,10 @@ class ServedListCommand extends Command
     public function handle(Docker $docker)
     {
         //Done: Check if network exists / create it
-        $this->checkPrequisites($docker);
+        $this->checkPrerequisites($docker);
         $containers = $docker->listContainers();
 
+        $this->drawLogo();
         $this->table($containers->slice(0, 1)->toArray(), $containers->slice(1)->toArray());
 
         return 0;

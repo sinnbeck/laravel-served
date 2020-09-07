@@ -5,11 +5,13 @@ namespace Sinnbeck\LaravelServed\Commands;
 use Sinnbeck\LaravelServed\Docker\Docker;
 use Illuminate\Console\Command;
 use Sinnbeck\LaravelServed\ServiceManager;
+use Sinnbeck\LaravelServed\Commands\Traits\Logo;
 use Sinnbeck\LaravelServed\Commands\Traits\DockerCheck;
 
 class ServedStartCommand extends Command
 {
-    use DockerCheck;
+    use DockerCheck,
+        Logo;
     /**
      * The name and signature of the console command.
      *
@@ -41,7 +43,7 @@ class ServedStartCommand extends Command
      */
     public function handle(Docker $docker, ServiceManager $manager)
     {
-        $this->checkPrequisites($docker);
+        $this->checkPrerequisites($docker);
         $servedName = config('served.name');
         $docker->ensureNetworkExists($servedName);
 
@@ -58,7 +60,8 @@ class ServedStartCommand extends Command
 
         }
         $this->line('');
-        $this->info('Laravel has been served');
+        $this->line('Laravel has been', 'fg=blue');
+        $this->drawLogo();
         $this->line('Visit the development server at: http://localhost:' . $manager->web()->container()->port());
         return 0;
 

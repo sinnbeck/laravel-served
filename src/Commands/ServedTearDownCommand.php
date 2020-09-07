@@ -42,7 +42,7 @@ class ServedTearDownCommand extends Command
     public function handle(Docker $docker, ServiceManager $manager)
     {
         //Done: Check if network exists / create it
-        $this->checkPrequisites($docker);
+        $this->checkPrerequisites($docker);
         $servedName = config('served.name');
 
         $onlyService = $this->argument('service');

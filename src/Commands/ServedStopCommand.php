@@ -41,7 +41,7 @@ class ServedStopCommand extends Command
      */
     public function handle(Docker $docker, ServiceManager $manager)
     {
-        $this->checkPrequisites($docker);
+        $this->checkPrerequisites($docker);
         $servedName = config('served.name');
         $docker->ensureNetworkExists($servedName);
 
