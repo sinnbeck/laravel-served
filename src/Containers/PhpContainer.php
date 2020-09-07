@@ -9,7 +9,7 @@ class PhpContainer extends Container
 
     public function run()
     {
-        $this->shell->run('docker run -d --restart=always --network="${:network}" --user=served:served --name="${:container_name}" --network-alias=served_php '. $this->volumes() . ' -v="${:PWD}":/app "${:image_name}"', $this->env());
+        $this->shell->run('docker run -d --restart=always --network="${:network}" --user=served:served --name="${:container_name}" --network-alias=served_php '. $this->volumes() . ' -v="${:local_dir}":/app "${:image_name}"', $this->env());
     }
 
     protected function env(): array
@@ -18,6 +18,7 @@ class PhpContainer extends Container
             'network' => $this->projectName(),
             'container_name' => $this->makeContainerName(),
             'image_name' => $this->makeImageName(),
+            'local_dir' => base_path(),
         ];
     }
 
