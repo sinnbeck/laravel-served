@@ -6,6 +6,7 @@ use Sinnbeck\LaravelServed\Shell\Shell;
 use Sinnbeck\LaravelServed\Traits\Storage;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
+use Sinnbeck\LaravelServed\Exceptions\TtyNotSupportedException;
 
 abstract class Container
 {
@@ -87,11 +88,21 @@ abstract class Container
 
     public function ssh()
     {
+        if (!Process::isTtySupported()) {
+            throw new TtyNotSupportedException('TTY mode is not supported');
+        }
+
         $process = Process::fromShellCommandline('docker exec -ti "${:container}" bash');
+
         $process->setTimeout(null);
         $process->setTty(true);
 
         $process->run(null, ['container' => $this->makeContainerName()]);
+    }
+
+    public function fallbackSsh()
+    {
+        return sprintf('docker exec -ti %s bash', $this->makeContainerName());
     }
 
     protected function makeContainerName()

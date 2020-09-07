@@ -4,6 +4,7 @@ namespace Sinnbeck\LaravelServed\Commands;
 
 use Sinnbeck\LaravelServed\ServiceManager;
 use Illuminate\Console\Command;
+use Sinnbeck\LaravelServed\Exceptions\TtyNotSupportedException;
 
 class ServedSshCommand extends Command
 {
@@ -41,7 +42,13 @@ class ServedSshCommand extends Command
         $serviceName = $this->argument('service');
         $service = $manager->resolveByName($serviceName);
 
-        $service->container()->ssh();
+        try {
+            $service->container()->ssh();
+
+        } catch (TtyNotSupportedException $e) {
+            $this->error('Your platform does not support TTY. This means that artisan cannot handle the docker shell.');
+            $this->line(sprintf('Instead run <fg=green>%s</> manually', $service->container()->fallbackSsh()));
+        }
 
         return 0;
     }
