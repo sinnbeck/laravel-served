@@ -11,7 +11,14 @@ abstract class Image implements ImageInterface
 {
     use Storage;
 
+    /**
+     * @var string
+     */
     protected $name;
+
+    /**
+     * @var array
+     */
     protected $config;
 
     /**
@@ -24,19 +31,38 @@ abstract class Image implements ImageInterface
      */
     protected $dockerFileBuilder;
 
+    /**
+     * @var string
+     */
     protected $library = 'library';
+
+    /**
+     * @var string
+     */
     protected $tag = 'latest';
+
+    /**
+     * @var string
+     */
     protected $tagAddition = '';
+
+    /**
+     * @var string
+     */
     protected $buildCommand = '';
+
+    /**
+     * @var string
+     */
     protected $buildFlags = ' --no-cache';
 
     /**
      * Image constructor.
-     * @param $name
-     * @param $config
+     * @param string $name
+     * @param array $config
      * @param Shell $shell
      */
-    public function __construct($name, $config, Shell $shell)
+    public function __construct(string $name, array $config, Shell $shell)
     {
         $this->config = $config;
         $this->shell = $shell;
@@ -45,6 +71,9 @@ abstract class Image implements ImageInterface
         $this->parseConfig();
     }
 
+    /**
+     * @return $this
+     */
     public function prepareBuild(): self
     {
         $this->prepareConfFiles();
@@ -54,6 +83,9 @@ abstract class Image implements ImageInterface
         return $this;
     }
 
+    /**
+     * @return void
+     */
     public function parseConfig(): void
     {
         foreach ($this->config as $key => $value) {
@@ -64,7 +96,6 @@ abstract class Image implements ImageInterface
             if ($key === 'alias') {
                 $this->setAlias($value);
             }
-
         }
     }
 
@@ -77,6 +108,9 @@ abstract class Image implements ImageInterface
         $this->shell->run($this->buildCommand . ($noCache ? $this->buildFlags : ''), $this->prepareEnv());
     }
 
+    /**
+     * @return array
+     */
     protected function prepareEnv()
     {
         return [];
