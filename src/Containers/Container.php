@@ -2,24 +2,36 @@
 
 namespace Sinnbeck\LaravelServed\Containers;
 
+use Sinnbeck\LaravelServed\Exceptions\TtyNotSupportedException;
 use Sinnbeck\LaravelServed\Shell\Shell;
 use Sinnbeck\LaravelServed\Traits\Storage;
-use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
-use Sinnbeck\LaravelServed\Exceptions\TtyNotSupportedException;
+use Symfony\Component\Process\Process;
 
 abstract class Container
 {
     use Storage;
 
+    /**
+     * @var string
+     */
     protected $name;
+    /**
+     * @var
+     */
     protected $config;
     /**
-     * @var \Sinnbeck\LaravelServed\Shell\Shell
+     * @var Shell
      */
     protected $shell;
 
-    public function __construct($name, $config, Shell $shell)
+    /**
+     * Container constructor.
+     * @param string $name
+     * @param $config
+     * @param Shell $shell
+     */
+    public function __construct(string $name, $config, Shell $shell)
     {
         $this->name = $name;
         $this->config = $config;
@@ -28,6 +40,9 @@ abstract class Container
         $this->parseConfig();
     }
 
+    /**
+     * @return $this
+     */
     public function prepare(): self
     {
         $this->remove();
@@ -40,26 +55,37 @@ abstract class Container
         //
     }
 
-    public function parseConfig()
+    /**
+     * @return void
+     */
+    public function parseConfig(): void
     {
         foreach ($this->config as $key => $value) {
-            if ($key == 'port') {
+            if ($key === 'port') {
                 $this->setPort($value);
             }
-
         }
     }
 
-    public function start()
+    /**
+     * @return void
+     */
+    public function start(): void
     {
         $this->shell->exec('docker start ' . $this->makeContainerName());
     }
 
-    public function stop()
+    /**
+     * @return void
+     */
+    public function stop(): void
     {
         $this->shell->exec('docker stop ' . $this->makeContainerName());
     }
 
+    /**
+     * @return array
+     */
     protected function env()
     {
         $baseEnv = [
@@ -71,12 +97,18 @@ abstract class Container
         return array_merge($baseEnv, $this->getAdditionalEnv());
     }
 
-    protected function getAdditionalEnv()
+    /**
+     * @return array
+     */
+    protected function getAdditionalEnv(): array
     {
         return [];
     }
 
-    public function remove()
+    /**
+     * @return void
+     */
+    public function remove(): void
     {
         try {
             $this->shell->exec('docker rm ' . $this->makeContainerName() . ' -f');
@@ -86,7 +118,10 @@ abstract class Container
         }
     }
 
-    public function ssh()
+    /**
+     * @throws TtyNotSupportedException
+     */
+    public function ssh(): void
     {
         if (!Process::isTtySupported()) {
             throw new TtyNotSupportedException('TTY mode is not supported');
@@ -100,48 +135,73 @@ abstract class Container
         $process->run(null, ['container' => $this->makeContainerName()]);
     }
 
-    public function fallbackSsh()
+    /**
+     * @return string
+     */
+    public function fallbackSsh(): string
     {
         return sprintf('docker exec -ti %s bash', $this->makeContainerName());
     }
 
-    protected function makeContainerName()
+    /**
+     * @return string
+     */
+    protected function makeContainerName(): string
     {
         return sprintf('served_%s_%s', $this->projectName(), $this->name());
     }
 
-    public function setPort($port)
+    /**
+     * @param string $port
+     * @return $this
+     */
+    public function setPort(string $port): self
     {
         if ($port) {
             $this->port = $port;
-
         }
 
         return $this;
     }
 
-    public function port()
+    /**
+     * @return string
+     */
+    public function port(): string
     {
         return $this->port;
     }
 
-    protected function projectName()
+    /**
+     * @return string
+     */
+    protected function projectName(): string
     {
         return config('served.name');
     }
 
-    public function name()
+    /**
+     * @return string
+     */
+    public function name(): string
     {
         return $this->name;
     }
 
-    protected function findDockerFile()
+    /**
+     * @return string
+     */
+    protected function findDockerFile(): string
     {
         return $this->storageDirectory() . 'Dockerfile';
     }
 
     //Duplicate code!
-    protected function makeImageName()
+
+    /**
+     * @return string
+     */
+    protected function makeImageName(): string
     {
         return sprintf('served/%s_%s', $this->projectName(), $this->name());
     }

@@ -2,20 +2,29 @@
 
 namespace Sinnbeck\LaravelServed\Services;
 
-use Sinnbeck\LaravelServed\Images\Image;
-use Sinnbeck\LaravelServed\Images\NginxImage;
 use Sinnbeck\LaravelServed\Containers\Container;
 use Sinnbeck\LaravelServed\Containers\NginxContainer;
+use Sinnbeck\LaravelServed\Images\Image;
+use Sinnbeck\LaravelServed\Images\NginxImage;
 
 class NginxService extends Service
 {
+    /**
+     * @var string
+     */
     protected $serviceName = 'Nginx';
 
+    /**
+     * @inheritDoc
+     */
     public function container(): Container
     {
         return new NginxContainer($this->name, $this->config, $this->shell);
     }
 
+    /**
+     * @inheritDoc
+     */
     public function image(): Image
     {
         return new NginxImage($this->name, $this->config, $this->shell);

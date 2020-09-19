@@ -2,16 +2,18 @@
 
 namespace Sinnbeck\LaravelServed\Commands;
 
-use Sinnbeck\LaravelServed\Docker\Docker;
+use Exception;
 use Illuminate\Console\Command;
-use Sinnbeck\LaravelServed\ServiceManager;
 use Sinnbeck\LaravelServed\Commands\Traits\DockerCheck;
 use Sinnbeck\LaravelServed\Commands\Traits\RunningConfig;
+use Sinnbeck\LaravelServed\Docker\Docker;
+use Sinnbeck\LaravelServed\ServiceManager;
 
 class ServedUpCommand extends Command
 {
     use DockerCheck,
         RunningConfig;
+
     /**
      * The name and signature of the console command.
      *
@@ -39,13 +41,16 @@ class ServedUpCommand extends Command
     /**
      * Execute the console command.
      *
+     * @param Docker $docker
+     * @param ServiceManager $manager
      * @return int
+     * @throws Exception
      */
-    public function handle(Docker $docker, ServiceManager $manager)
+    public function handle(Docker $docker, ServiceManager $manager): int
     {
         $this->checkPrerequisites($docker);
         $servedName = config('served.name');
-        $this->info('Creating network: ' .$servedName);
+        $this->info('Creating network: ' . $servedName);
         $docker->ensureNetworkExists($servedName);
 
         $onlyService = $this->argument('service');
@@ -74,6 +79,5 @@ class ServedUpCommand extends Command
         $this->servedRunning($manager);
 
         return 0;
-
     }
 }

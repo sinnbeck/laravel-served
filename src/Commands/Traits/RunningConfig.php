@@ -7,7 +7,12 @@ use Sinnbeck\LaravelServed\ServiceManager;
 trait RunningConfig
 {
     use Logo;
-    protected function servedRunning(ServiceManager $manager)
+
+    /**
+     * @param ServiceManager $manager
+     * @throws \Exception
+     */
+    protected function servedRunning(ServiceManager $manager): void
     {
         $this->line('      Laravel has been', 'fg=blue');
         $this->drawLogo();

@@ -2,9 +2,9 @@
 
 namespace Sinnbeck\LaravelServed\Images;
 
+use Sinnbeck\LaravelServed\Docker\DockerFileBuilder;
 use Sinnbeck\LaravelServed\Shell\Shell;
 use Sinnbeck\LaravelServed\Traits\Storage;
-use Sinnbeck\LaravelServed\Docker\DockerFileBuilder;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
 abstract class Image implements ImageInterface
@@ -15,12 +15,12 @@ abstract class Image implements ImageInterface
     protected $config;
 
     /**
-     * @var \Sinnbeck\LaravelServed\Shell\Shell
+     * @var Shell
      */
     protected $shell;
 
     /**
-     * @var \Sinnbeck\LaravelServed\Docker\DockerFileBuilder
+     * @var DockerFileBuilder
      */
     protected $dockerFileBuilder;
 
@@ -30,6 +30,12 @@ abstract class Image implements ImageInterface
     protected $buildCommand = '';
     protected $buildFlags = ' --no-cache';
 
+    /**
+     * Image constructor.
+     * @param $name
+     * @param $config
+     * @param Shell $shell
+     */
     public function __construct($name, $config, Shell $shell)
     {
         $this->config = $config;
@@ -48,20 +54,24 @@ abstract class Image implements ImageInterface
         return $this;
     }
 
-    public function parseConfig()
+    public function parseConfig(): void
     {
         foreach ($this->config as $key => $value) {
-            if ($key == 'version') {
+            if ($key === 'version') {
                 $this->setImageTag($value);
             }
 
-            if ($key == 'alias') {
+            if ($key === 'alias') {
                 $this->setAlias($value);
             }
 
         }
     }
 
+    /**
+     * @param boolean $noCache
+     *
+     */
     public function build($noCache = false): void
     {
         $this->shell->run($this->buildCommand . ($noCache ? $this->buildFlags : ''), $this->prepareEnv());
@@ -77,7 +87,10 @@ abstract class Image implements ImageInterface
         //
     }
 
-    public function imageExists()
+    /**
+     * @return bool
+     */
+    public function imageExists(): bool
     {
         try {
             $this->shell->exec(sprintf('docker inspect image %s', $this->makeImageName()));
@@ -85,40 +98,58 @@ abstract class Image implements ImageInterface
         } catch (ProcessFailedException $e) {
             return false;
         }
-
     }
 
-    public function remove()
+    /**
+     * @return void
+     */
+    public function remove(): void
     {
         $this->shell->exec(sprintf('docker rmi %s -f', $this->makeImageName()));
     }
 
-    protected function makeImageName()
+    /**
+     * @return string
+     */
+    protected function makeImageName(): string
     {
         return sprintf('served/%s_%s', $this->projectName(), $this->name());
     }
 
-    public function imageName()
+    /**
+     * @return string
+     */
+    public function imageName(): string
     {
         return sprintf('%s/%s', $this->library, $this->image);
     }
 
+    /**
+     * @return string
+     */
     public function imageTag(): string
     {
         return sprintf('%s%s', $this->tag, $this->tagAddition);
     }
 
+    /**
+     * @param $tag
+     * @return $this
+     */
     public function setImageTag($tag): self
     {
         if ($tag) {
             $this->tag = $tag;
-
         }
 
         return $this;
     }
 
-    public function setAlias($alias): self
+    /**
+     * @param string $alias
+     * @return $this
+     */
+    public function setAlias(string $alias): self
     {
         if ($alias) {
             $this->alias = $alias;
@@ -127,36 +158,56 @@ abstract class Image implements ImageInterface
         return $this;
     }
 
+    /**
+     * @return string
+     */
     protected function projectName(): string
     {
         return config('served.name');
     }
 
+    /**
+     * @return string
+     */
     public function simpleName()
     {
         return strtolower(class_basename($this));
     }
 
-    public function name()
+    /**
+     * @return string
+     */
+    public function name(): string
     {
         return $this->name;
     }
 
-    protected function storeDockerfile(string $content)
+    /**
+     * @param string $content
+     * @return void
+     */
+    protected function storeDockerfile(string $content): void
     {
         $storagePath = $this->storageDirectory();
-        file_put_contents($storagePath .'Dockerfile', $content);
+        file_put_contents($storagePath . 'Dockerfile', $content);
     }
 
-    protected function copyDockerFile($filePath, $targetName)
+    /**
+     * @param string $filePath
+     * @param string $targetName
+     * @return void
+     */
+    protected function copyDockerFile(string $filePath, string $targetName): void
     {
         $storagePath = $this->storageDirectory();
         copy($filePath, $storagePath . $targetName);
     }
 
-    protected function findDockerFile()
+    /**
+     * @return string
+     */
+    protected function findDockerFile(): string
     {
         return $this->storageDirectory() . 'Dockerfile';
     }
-
 }

@@ -38,6 +38,7 @@ class ServedListCommand extends Command
     /**
      * Execute the console command.
      *
+     * @param Docker $docker
      * @return int
      */
     public function handle(Docker $docker)

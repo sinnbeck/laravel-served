@@ -8,7 +8,10 @@ use Sinnbeck\LaravelServed\Exceptions\DockerNotInstalledException;
 
 trait DockerCheck
 {
-    protected function checkPrerequisites(Docker $docker)
+    /**
+     * @param Docker $docker
+     */
+    protected function checkPrerequisites(Docker $docker): void
     {
         try {
             $docker->verifyDockerIsInstalled();
