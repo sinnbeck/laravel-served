@@ -70,7 +70,7 @@ abstract class Image implements ImageInterface
 
     /**
      * @param boolean $noCache
-     *
+     * @return void
      */
     public function build($noCache = false): void
     {
