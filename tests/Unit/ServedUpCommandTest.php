@@ -3,7 +3,7 @@
 namespace Tests\Unit;
 
 use Sinnbeck\LaravelServed\Commands\ServedUpCommand;
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 
 class ServedUpCommandTest extends TestCase
 {

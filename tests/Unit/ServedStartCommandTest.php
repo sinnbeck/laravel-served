@@ -2,8 +2,8 @@
 
 namespace Tests\Unit;
 
-use PHPUnit\Framework\TestCase;
 use Sinnbeck\LaravelServed\Commands\ServedStartCommand;
+use Tests\TestCase;
 
 class ServedStartCommandTest extends TestCase
 {

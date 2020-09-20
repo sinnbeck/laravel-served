@@ -2,8 +2,8 @@
 
 namespace Tests\Unit;
 
-use PHPUnit\Framework\TestCase;
 use Sinnbeck\LaravelServed\Commands\ServedTearDownCommand;
+use Tests\TestCase;
 
 class ServedTearDownCommandTest extends TestCase
 {

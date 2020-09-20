@@ -2,8 +2,8 @@
 
 namespace Tests\Unit;
 
-use PHPUnit\Framework\TestCase;
 use Sinnbeck\LaravelServed\Commands\ServedStopCommand;
+use Tests\TestCase;
 
 class ServedStopCommandTest extends TestCase
 {

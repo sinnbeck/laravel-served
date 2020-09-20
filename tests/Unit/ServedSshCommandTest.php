@@ -2,8 +2,8 @@
 
 namespace Tests\Unit;
 
-use PHPUnit\Framework\TestCase;
 use Sinnbeck\LaravelServed\Commands\ServedSshCommand;
+use Tests\TestCase;
 
 class ServedSshCommandTest extends TestCase
 {
