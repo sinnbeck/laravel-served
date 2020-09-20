@@ -19,7 +19,8 @@
     "require": {},
     "require-dev": {
         "symfony/process": "^5.1",
-        "laravel/framework": ">=6.0"
+        "laravel/framework": ">=6.0",
+        "phpunit/phpunit": "^9.3"
     },
     "autoload": {
         "psr-4": {
