@@ -3,7 +3,6 @@
 namespace Sinnbeck\LaravelServed\Docker;
 
 use Sinnbeck\LaravelServed\Shell\Shell;
-use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Sinnbeck\LaravelServed\Exceptions\DockerNotRunningException;
 use Sinnbeck\LaravelServed\Exceptions\DockerNotInstalledException;
@@ -15,9 +14,8 @@ class Docker
      */
     protected $shell;
 
-    public function __construct(Shell $shell, ConsoleOutput $consoleOutput)
+    public function __construct(Shell $shell)
     {
-        $this->consoleOutput = $consoleOutput;
         $this->shell = $shell;
     }
 
