@@ -114,6 +114,20 @@ class DockerFileBuilder
     }
 
     /**
+     * @param string $workdir
+     * @return $this
+     */
+    public function cmd(array $cmd)
+    {
+        $items = array_map(function($item) {
+            return '"' . $item . '"';
+        }, $cmd);
+
+        $this->fileStructure[] = sprintf('CMD [ %s ]', implode(', ', $items));
+        return $this;
+    }
+
+    /**
      * @return string
      */
     public function __toString(): string
