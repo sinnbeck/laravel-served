@@ -1,0 +1,4 @@
+FROM webdevops/apache:latest
+ENV WEB_PHP_SOCKET=served_php:9000
+ENV WEB_DOCUMENT_ROOT=/app/public
+ENV WEB_PHP_TIMEOUT=60

@@ -1,0 +1,7 @@
+FROM library/mysql:5.7
+
+# Setting env vars for mysql init
+ENV MYSQL_ROOT_PASSWORD=password
+ENV MYSQL_DATABASE=laravel
+ENV MYSQL_USER=laravel
+ENV MYSQL_PASSWORD=password
