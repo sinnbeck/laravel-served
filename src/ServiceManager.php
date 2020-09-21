@@ -5,6 +5,7 @@ namespace Sinnbeck\LaravelServed;
 use Exception;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Sinnbeck\LaravelServed\Services\RedisService;
 use Sinnbeck\LaravelServed\Services\ApacheService;
 use Sinnbeck\LaravelServed\Services\MysqlService;
 use Sinnbeck\LaravelServed\Services\NginxService;
@@ -106,6 +107,9 @@ class ServiceManager
 
             case 'mysql':
                 return new  MysqlService($name, $config, $this->shell);
+
+            case 'redis':
+                return new  RedisService($name, $config, $this->shell);
 
             case null:
                 throw new Exception('No service specified for ' . $name);

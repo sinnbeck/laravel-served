@@ -7,6 +7,7 @@ use Sinnbeck\LaravelServed\Shell\Shell;
 use Sinnbeck\LaravelServed\Images\PhpImage;
 use Sinnbeck\LaravelServed\Images\NginxImage;
 use Sinnbeck\LaravelServed\Images\MysqlImage;
+use Sinnbeck\LaravelServed\Images\RedisImage;
 use Sinnbeck\LaravelServed\Images\ApacheImage;
 
 class DockerImageTest extends TestCase
@@ -50,5 +51,14 @@ class DockerImageTest extends TestCase
         $content = $image->writeDockerFile();
 
         $this->assertEquals($this->getExpectedContent('DockerFile-mysql'), $content);
+    }
+
+    /** @test */
+    public function it_can_make_redis_docker_file()
+    {
+        $image = new RedisImage('test', [], app(Shell::class));
+        $content = $image->writeDockerFile();
+
+        $this->assertEquals($this->getExpectedContent('DockerFile-redis'), $content);
     }
 }
