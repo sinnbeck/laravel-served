@@ -52,10 +52,9 @@ return [
             'version' => '5.7',
             'port' => 3306,
             'root_password' => 'password',
-            'database' => 'laravel',
-            'username' => 'laravel',
-            'password' => 'password',
+            'database' => env('DB_DATABASE', 'laravel'),
+            'username' => env('DB_USERNAME', 'laravel'),
+            'password' => env('DB_PASSWORD', 'password'),
         ],
     ],
-
 ];
