@@ -2,9 +2,10 @@
 
 namespace Sinnbeck\LaravelServed\Commands;
 
-use Sinnbeck\LaravelServed\ServiceManager;
+use Exception;
 use Illuminate\Console\Command;
 use Sinnbeck\LaravelServed\Exceptions\TtyNotSupportedException;
+use Sinnbeck\LaravelServed\ServiceManager;
 
 class ServedSshCommand extends Command
 {
@@ -35,9 +36,11 @@ class ServedSshCommand extends Command
     /**
      * Execute the console command.
      *
+     * @param ServiceManager $manager
      * @return int
+     * @throws Exception
      */
-    public function handle(ServiceManager $manager)
+    public function handle(ServiceManager $manager): int
     {
         $serviceName = $this->argument('service');
         $service = $manager->resolveByName($serviceName);

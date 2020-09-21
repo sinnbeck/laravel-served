@@ -4,11 +4,11 @@ namespace Sinnbeck\LaravelServed;
 
 use Illuminate\Support\ServiceProvider;
 use Sinnbeck\LaravelServed\Commands\ServedListCommand;
-use Sinnbeck\LaravelServed\Commands\ServedUpCommand;
+use Sinnbeck\LaravelServed\Commands\ServedSshCommand;
 use Sinnbeck\LaravelServed\Commands\ServedStartCommand;
 use Sinnbeck\LaravelServed\Commands\ServedStopCommand;
-use Sinnbeck\LaravelServed\Commands\ServedSshCommand;
 use Sinnbeck\LaravelServed\Commands\ServedTearDownCommand;
+use Sinnbeck\LaravelServed\Commands\ServedUpCommand;
 
 class ServedServiceProvider extends ServiceProvider
 {
@@ -17,12 +17,11 @@ class ServedServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         $this->mergeConfigFrom(
-            __DIR__.'/config/served.php', 'served'
+            __DIR__ . '/config/served.php', 'served'
         );
-
     }
 
     /**
@@ -33,7 +32,7 @@ class ServedServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__.'/config/served.php' => config_path('served.php')
+            __DIR__ . '/config/served.php' => config_path('served.php')
         ], 'config');
 
         if ($this->app->runningInConsole()) {

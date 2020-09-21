@@ -4,16 +4,21 @@ namespace Sinnbeck\LaravelServed\Commands\Traits;
 
 trait Logo
 {
-    protected function drawLogo()
+    /**
+     * @return void
+     */
+    protected function drawLogo(): void
     {
         $this->line(' __   ___  __        ___  __  
 /__` |__  |__) \  / |__  |  \ 
 .__/ |___ |  \  \/  |___ |__/ 
                               ', 'fg=blue');
-
     }
 
-    protected function oldLogo()
+    /**
+     * @return void
+     */
+    protected function oldLogo(): void
     {
         $this->line(' _____                   _
 |   __|___ ___ _ _ ___ _| |

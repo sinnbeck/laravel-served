@@ -4,13 +4,22 @@ namespace Sinnbeck\LaravelServed\Containers;
 
 class ApacheContainer extends Container
 {
+    /**
+     * @var string
+     */
     protected $port = '8080';
 
-    public function run()
+    /**
+     * @return void
+     */
+    public function run(): void
     {
         $this->shell->run('docker run -d --restart always --network="${:network}" --name "${:container_name}" -p "${:port}":80 -v "${:local_dir}":/app "${:image_name}"', $this->env());
     }
 
+    /**
+     * @return array
+     */
     protected function env(): array
     {
         return [
@@ -20,6 +29,5 @@ class ApacheContainer extends Container
             'port' => $this->port(),
             'local_dir' => base_path(),
         ];
-
     }
 }

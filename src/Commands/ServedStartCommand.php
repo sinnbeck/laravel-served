@@ -2,16 +2,18 @@
 
 namespace Sinnbeck\LaravelServed\Commands;
 
-use Sinnbeck\LaravelServed\Docker\Docker;
+use Exception;
 use Illuminate\Console\Command;
-use Sinnbeck\LaravelServed\ServiceManager;
 use Sinnbeck\LaravelServed\Commands\Traits\DockerCheck;
 use Sinnbeck\LaravelServed\Commands\Traits\RunningConfig;
+use Sinnbeck\LaravelServed\Docker\Docker;
+use Sinnbeck\LaravelServed\ServiceManager;
 
 class ServedStartCommand extends Command
 {
     use DockerCheck,
         RunningConfig;
+
     /**
      * The name and signature of the console command.
      *
@@ -39,9 +41,12 @@ class ServedStartCommand extends Command
     /**
      * Execute the console command.
      *
+     * @param Docker $docker
+     * @param ServiceManager $manager
      * @return int
+     * @throws Exception
      */
-    public function handle(Docker $docker, ServiceManager $manager)
+    public function handle(Docker $docker, ServiceManager $manager): int
     {
         $this->checkPrerequisites($docker);
         $servedName = config('served.name');
@@ -62,7 +67,5 @@ class ServedStartCommand extends Command
         $this->line('');
         $this->servedRunning($manager);
         return 0;
-
-
     }
 }
