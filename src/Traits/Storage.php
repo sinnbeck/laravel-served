@@ -5,6 +5,7 @@ namespace Sinnbeck\LaravelServed\Traits;
 trait Storage
 {
     /**
+     * @param bool $relative
      * @return string
      */
     protected function storageDirectory($relative = false): string
@@ -13,7 +14,9 @@ trait Storage
         $storagePath = storage_path($basePath);
 
         if (!is_dir($storagePath)) {
-            mkdir($storagePath, 0777, true);
+            if (!mkdir($storagePath, 0777, true) && !is_dir($storagePath)) {
+                throw new \RuntimeException(sprintf('Directory "%s" was not created', $storagePath));
+            }
         }
 
         if ($relative) {

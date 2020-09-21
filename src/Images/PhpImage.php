@@ -6,12 +6,30 @@ use Illuminate\Support\Arr;
 
 class PhpImage extends Image
 {
+    /**
+     * @var string
+     */
     protected $image = 'php';
+
+    /**
+     * @var string
+     */
     protected $tag = '7.4';
+
+    /**
+     * @var string
+     */
     protected $tagAddition = '-fpm';
+
+    /**
+     * @var string
+     */
     protected $buildCommand = 'docker build -t "${:imagename}" --build-arg uid="${:uid}" . -f "${:dockerfile}"';
 
-    protected function prepareEnv()
+    /**
+     * @return array
+     */
+    protected function prepareEnv(): array
     {
         return [
             'imagename' => $this->makeImageName(),
@@ -20,6 +38,9 @@ class PhpImage extends Image
         ];
     }
 
+    /**
+     * @return string
+     */
     public function writeDockerFile(): string
     {
         $runInstalls = [
@@ -57,17 +78,17 @@ class PhpImage extends Image
             $command
                 ->comment('Adding php packages', true)
                 ->copy('/usr/bin/install-php-extensions', '/usr/bin/', 'mlocati/php-extension-installer')
-                ->run('install-php-extensions '. implode(' ', $modules));
+                ->run('install-php-extensions ' . implode(' ', $modules));
 
         }
 
-        if (in_array('xdebug', $modules) && Arr::get($this->config,'xdebug.enabled')) {
+        if (in_array('xdebug', $modules) && Arr::get($this->config, 'xdebug.enabled')) {
             $command
                 ->comment('Adding xdebug', true)
                 ->run([
                     'echo "[xdebug]" >> "$PHP_INI_DIR/conf.d/docker-php-ext-xdebug.ini"',
                     'echo "xdebug.remote_enable = 1" >> "$PHP_INI_DIR/conf.d/docker-php-ext-xdebug.ini"',
-                    'echo "xdebug.remote_port = ' . Arr::get($this->config,'xdebug.port', 9001) . '" >> "$PHP_INI_DIR/conf.d/docker-php-ext-xdebug.ini"',
+                    'echo "xdebug.remote_port = ' . Arr::get($this->config, 'xdebug.port', 9001) . '" >> "$PHP_INI_DIR/conf.d/docker-php-ext-xdebug.ini"',
                     'echo "xdebug.remote_connect_back = 1" >> "$PHP_INI_DIR/conf.d/docker-php-ext-xdebug.ini"',
                     'echo "xdebug.remote_autostart = 1" >> "$PHP_INI_DIR/conf.d/docker-php-ext-xdebug.ini"',
                 ]);
@@ -93,6 +114,6 @@ class PhpImage extends Image
             ->comment('Set work dir', true)
             ->workdir('/app');
 
-        return (string) $command;
+        return (string)$command;
     }
 }

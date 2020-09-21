@@ -6,12 +6,17 @@ use Illuminate\Support\Arr;
 
 class PhpContainer extends Container
 {
-
-    public function run()
+    /**
+     * @return void
+     */
+    public function run(): void
     {
-        $this->shell->run('docker run -d --restart=always --network="${:network}" --user=served:served --name="${:container_name}" --network-alias=served_php '. $this->volumes() . ' -v="${:local_dir}":/app "${:image_name}"', $this->env());
+        $this->shell->run('docker run -d --restart=always --network="${:network}" --user=served:served --name="${:container_name}" --network-alias=served_php ' . $this->volumes() . ' -v="${:local_dir}":/app "${:image_name}"', $this->env());
     }
 
+    /**
+     * @return array
+     */
     protected function env(): array
     {
         return [
@@ -22,7 +27,10 @@ class PhpContainer extends Container
         ];
     }
 
-    protected function volumes()
+    /**
+     * @return string
+     */
+    protected function volumes(): string
     {
         $volumes = Arr::get($this->config, 'volumes', []);
         if (!$volumes) {
@@ -33,6 +41,4 @@ class PhpContainer extends Container
             return '-v "' . $item . '"';
         })->implode(' ');
     }
-
-
 }

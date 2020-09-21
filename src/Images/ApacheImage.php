@@ -4,18 +4,38 @@ namespace Sinnbeck\LaravelServed\Images;
 
 class ApacheImage extends Image
 {
+    /**
+     * @var string
+     */
     protected $library = 'webdevops';
+
+    /**
+     * @var string
+     */
     protected $image = 'apache';
+
+    /**
+     * @var string
+     */
     protected $tag = 'latest';
 
+    /**
+     * @var string
+     */
     protected $buildCommand = 'docker build -t  "${:imagename}" . -f "${:dockerfile}"';
 
-    protected function prepareConfFiles()
+    /**
+     * @return void
+     */
+    protected function prepareConfFiles(): void
     {
-        $this->copyDockerFile(__DIR__.'/stubs/nginx.conf', 'default.conf');
+        $this->copyDockerFile(__DIR__ . '/stubs/nginx.conf', 'default.conf');
     }
 
-    protected function prepareEnv()
+    /**
+     * @return array
+     */
+    protected function prepareEnv(): array
     {
         return [
             'imagename' => $this->makeImageName(),
@@ -24,6 +44,9 @@ class ApacheImage extends Image
         ];
     }
 
+    /**
+     * @return string
+     */
     public function writeDockerFile(): string
     {
         $command = $this->dockerFileBuilder
@@ -32,8 +55,6 @@ class ApacheImage extends Image
             ->env('WEB_DOCUMENT_ROOT', '/app/public')
             ->env('WEB_PHP_TIMEOUT', '60');
 
-        return (string) $command;
+        return (string)$command;
     }
-
-
 }
