@@ -136,6 +136,13 @@ Coming soon
 ### Redis
 Coming soon
 
+## Testing
+To run tests with 
+```
+$ composer test
+```
+
+
 ## Todo
 - [ ] Testing!
 - [ ] Add more images
