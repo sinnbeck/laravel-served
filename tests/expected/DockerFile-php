@@ -1,0 +1,30 @@
+FROM library/php:7.4-fpm
+
+# disable warnings for "dangerous" messages
+ENV APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=1
+
+# Adding linux packages
+RUN apt-get update \
+    && apt-get install -y unzip zip \
+    && rm -rf /var/lib/apt/lists/*
+
+# add development php.ini file
+RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
+# add a local user with the same uid as the local
+# prepare empty composer config directory
+# ensure user owns its home directory
+ARG uid
+RUN useradd -G root -u $uid -d /home/served served \
+    && mkdir -p /home/served/.composer \
+    && chown -R served:served /home/served
+# set new user to run php-fpm
+
+# add composer
+# set composer to use https
+# add prestissimo run composer in parallel
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer \
+    && runuser -l served -c "composer config --global repos.packagist composer https://packagist.org" \
+    && runuser -l served -c "composer global require hirak/prestissimo"
+
+# Set work dir
+WORKDIR /app

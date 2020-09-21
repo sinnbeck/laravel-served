@@ -2,7 +2,7 @@
 
 namespace Sinnbeck\LaravelServed\Containers;
 
-class ApacheContainer extends Container
+class RedisContainer extends Container
 {
     /**
      * @var string
@@ -14,7 +14,7 @@ class ApacheContainer extends Container
      */
     public function run(): void
     {
-        $this->shell->run('docker run -d --restart always --network="${:network}" --name "${:container_name}" -p "${:port}":80 -v "${:local_dir}":/app "${:image_name}"', $this->env());
+        $this->shell->run('docker run -d --restart always --network="${:network}" --network-alias="${:alias}" --name "${:container_name}" "${:image_name}"', $this->env());
     }
 
     /**
@@ -24,10 +24,9 @@ class ApacheContainer extends Container
     {
         return [
             'network' => $this->projectName(),
+            'alias' => $this->name(),
             'container_name' => $this->makeContainerName(),
             'image_name' => $this->makeImageName(),
-            'port' => $this->port(),
-            'local_dir' => base_path(),
         ];
     }
 }

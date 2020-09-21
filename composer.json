@@ -19,11 +19,18 @@
     "require": {},
     "require-dev": {
         "symfony/process": "^5.1",
-        "laravel/framework": ">=6.0"
+        "laravel/framework": ">=6.0",
+        "orchestra/testbench": "^4.0 || ^5.0 || ^6.0",
+        "phpunit/phpunit": "^8.0 || ^9.0"
     },
     "autoload": {
         "psr-4": {
             "Sinnbeck\\LaravelServed\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
         }
     },
     "extra": {
@@ -36,6 +43,9 @@
             ]
         }
     },
-    "minimum-stability": "stable"
-    
+    "minimum-stability": "stable",
+    "scripts": {
+        "test": "vendor/bin/phpunit"
+    }
+
 }

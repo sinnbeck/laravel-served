@@ -130,11 +130,26 @@ To connect to the database from laravel you need to use the config key (in the e
             'password' => 'password',
         ],
 ```
+
+### Redis
+Add redis to the modules in php and then add redis to your extras array.
+```
+'redis' => [
+            'service' => 'redis',
+        ]
+```
+Change your `REDIS_HOST` in .env to whatever you use as the key (eg. redis)
+
 ### Postgres
 Coming soon
 
-### Redis
-Coming soon
+
+## Testing
+To run tests with 
+```
+$ composer test
+```
+
 
 ## Todo
 - [ ] Testing!

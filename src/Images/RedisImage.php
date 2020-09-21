@@ -2,35 +2,35 @@
 
 namespace Sinnbeck\LaravelServed\Images;
 
-class NginxImage extends Image
+class RedisImage extends Image
 {
     /**
      * @var string
      */
-    protected $image = 'nginx';
+    protected $image = 'redis';
 
     /**
      * @var string
      */
-    protected $tag = '1.19';
+    protected $tag = 'latest';
 
     /**
      * @var string
      */
-    protected $buildCommand = 'docker build -t "${:imagename}" . -f "${:dockerfile}"';
+    protected $buildCommand = 'docker build -t  "${:imagename}" . -f "${:dockerfile}"';
 
     /**
      * @return void
      */
     protected function prepareConfFiles(): void
     {
-        $this->copyDockerFile(__DIR__ . '/stubs/nginx.conf', 'default.conf');
+        //
     }
 
     /**
      * @return array
      */
-    protected function prepareEnv()
+    protected function prepareEnv(): array
     {
         return [
             'imagename' => $this->makeImageName(),
@@ -46,10 +46,9 @@ class NginxImage extends Image
     {
         $command = $this->dockerFileBuilder
             ->from($this->imageName(), $this->imageTag())
-            ->newLine()
-            ->comment('Copy in new nginx config')
-//            ->copy('storage/served/nginx/default.conf', '/etc/nginx/conf.d/default.conf');
-            ->copy($this->storageDirectory(true) . 'default.conf', '/etc/nginx/conf.d/default.conf');
+            //->copy('redis.conf', '/usr/local/etc/redis/redis.conf')
+            //->cmd(['redis-server', '/usr/local/etc/redis/redis.conf']);
+            ->cmd(['redis-server']);
 
         return (string)$command;
     }
