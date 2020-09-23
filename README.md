@@ -131,6 +131,19 @@ To connect to the database from laravel you need to use the config key (in the e
         ],
 ```
 
+### Postgres
+To connect to postgresql from laravel you need to use the config key (in the example that would be `postgres`) as hostname. The port is the default for mysql (5432) and not the one specified in the config. To connect from outside of laravel, use the port specified in the config (eg. 54320) and 127.0.0.1
+```
+'postgres' => [
+            'service' => 'postgres',
+            'version' => '12.4',
+            'port' => 54320,
+            'database' => 'laravel',
+            'username' => 'laravel',
+            'password' => 'password',
+        ],
+```
+
 ### Redis
 Add redis to the modules in php and then add redis to your extras array.
 ```
@@ -139,9 +152,6 @@ Add redis to the modules in php and then add redis to your extras array.
         ]
 ```
 Change your `REDIS_HOST` in .env to whatever you use as the key (eg. redis)
-
-### Postgres
-Coming soon
 
 
 ## Testing

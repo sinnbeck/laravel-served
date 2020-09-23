@@ -1,0 +1,6 @@
+FROM library/postgres:12.4
+
+# Setting env vars for postgres init
+ENV POSTGRES_DB=laravel
+ENV POSTGRES_USER=laravel
+ENV POSTGRES_PASSWORD=password

@@ -11,6 +11,7 @@ use Sinnbeck\LaravelServed\Services\MysqlService;
 use Sinnbeck\LaravelServed\Services\NginxService;
 use Sinnbeck\LaravelServed\Services\PhpService;
 use Sinnbeck\LaravelServed\Shell\Shell;
+use Sinnbeck\LaravelServed\Services\PostgresService;
 
 class ServiceManager
 {
@@ -107,6 +108,10 @@ class ServiceManager
 
             case 'mysql':
                 return new  MysqlService($name, $config, $this->shell);
+
+            case 'postgres':
+            case 'pgsql':
+                return new  PostgresService($name, $config, $this->shell);
 
             case 'redis':
                 return new  RedisService($name, $config, $this->shell);
