@@ -61,4 +61,13 @@ class DockerImageTest extends TestCase
 
         $this->assertEquals($this->getExpectedContent('DockerFile-redis'), $content);
     }
+
+    /** @test */
+    public function it_can_make_postgres_docker_file()
+    {
+        $image = new RedisImage('test', [], app(Shell::class));
+        $content = $image->writeDockerFile();
+
+        $this->assertEquals($this->getExpectedContent('DockerFile-redis'), $content);
+    }
 }
