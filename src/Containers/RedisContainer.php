@@ -4,10 +4,6 @@ namespace Sinnbeck\LaravelServed\Containers;
 
 class RedisContainer extends Container
 {
-    /**
-     * @var string
-     */
-    protected $port = '8080';
 
     /**
      * @return void
