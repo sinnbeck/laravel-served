@@ -33,7 +33,7 @@ class ServedServiceProvider extends ServiceProvider
     {
         $this->publishes([
             __DIR__ . '/config/served.php' => config_path('served.php')
-        ], 'config');
+        ], 'served-config');
 
         if ($this->app->runningInConsole()) {
             $this->commands([
