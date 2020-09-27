@@ -62,10 +62,10 @@ class DockerFileBuilder
      * @param string|array $command
      * @return $this
      */
-    public function run($command): self
+    public function run($command, $delimiter = '&&'): self
     {
         if (is_array($command)) {
-            $command = implode(' \\' . "\n    && ", $command);
+            $command = implode(' \\' . "\n    $delimiter ", $command);
         }
 
         $this->fileStructure[] = sprintf('RUN %s', $command);
