@@ -45,18 +45,10 @@ class PhpImage extends Image
     {
         $runInstalls = [
             'apt-get update',
-            'apt-get install -y unzip zip',
+            'apt-get install -y unzip zip gnupg',
+            'rm -rf /var/lib/apt/lists/*',
         ];
 
-        if (Arr::get($this->config, 'npm')) {
-            $runInstalls = array_merge($runInstalls, [
-                'curl -sL https://deb.nodesource.com/setup_12.x | bash',
-                'apt-get install -y nodejs',
-                'curl -L https://www.npmjs.com/install.sh | sh'
-            ]);
-        }
-
-        $runInstalls[] = 'rm -rf /var/lib/apt/lists/*';
 
         $command = $this->dockerFileBuilder->from($this->imageName(), $this->imageTag())
             ->comment('disable warnings for "dangerous" messages', true)
@@ -65,8 +57,54 @@ class PhpImage extends Image
             ->run($runInstalls);
 
         $command
+            ->comment('Installing packages for sql dump')
+            ->run([
+                'RUN set -ex;',
+                'key=\'A4A9406876FCBD3C456770C88C718D3B5072E1F5\';',
+                'export GNUPGHOME="$(mktemp -d)";',
+                'gpg --batch --keyserver ha.pool.sks-keyservers.net --recv-keys "$key";',
+                'gpg --batch --export "$key" > /etc/apt/trusted.gpg.d/mysql.gpg;',
+                'gpgconf --kill all;',
+                'rm -rf "$GNUPGHOME";',
+                'apt-key list > /dev/null',
+            ], '')
+            ->newLine()
+            ->run([
+                'echo "deb http://repo.mysql.com/apt/debian/ buster mysql-8.0" > /etc/apt/sources.list.d/mysql.list',
+                'apt-get update',
+                'apt-get install -y mysql-community-client postgresql-client sqlite3',
+                'rm -rf /var/lib/apt/lists/*'
+            ]);
+
+        $command
             ->comment('add development php.ini file', true)
             ->run('mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"');
+
+        $command
+            ->comment("add a local user with the same uid as the local\nprepare empty composer config directory\nensure user owns its home directory")
+            ->arg('uid')
+            ->run([
+                'useradd -G root -u $uid -d /home/served served',
+                'mkdir -p /home/served/.composer',
+                'chown -R served:served /home/served'
+            ])
+            ->comment('set new user to run php-fpm')
+            ->comment("add composer\nset composer to use https\nadd prestissimo run composer in parallel", true)
+            ->run([
+                'curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer',
+                'runuser -l served -c "composer config --global repos.packagist composer https://packagist.org"',
+                'runuser -l served -c "composer global require hirak/prestissimo"'
+            ]);
+
+        if (Arr::get($this->config, 'npm', false)) {
+            $command
+                ->comment('Adding NPM')
+                ->run([
+                'curl -sL https://deb.nodesource.com/setup_12.x | bash',
+                'apt-get install -y nodejs',
+                'curl -L https://www.npmjs.com/install.sh | sh',
+            ]);
+        }
 
         $modules = Arr::get($this->config, 'modules', []);
 
@@ -93,22 +131,6 @@ class PhpImage extends Image
                     'echo "xdebug.remote_autostart = 1" >> "$PHP_INI_DIR/conf.d/docker-php-ext-xdebug.ini"',
                 ]);
         }
-
-        $command
-            ->comment("add a local user with the same uid as the local\nprepare empty composer config directory\nensure user owns its home directory")
-            ->arg('uid')
-            ->run([
-                'useradd -G root -u $uid -d /home/served served',
-                'mkdir -p /home/served/.composer',
-                'chown -R served:served /home/served'
-            ])
-            ->comment('set new user to run php-fpm')
-            ->comment("add composer\nset composer to use https\nadd prestissimo run composer in parallel", true)
-            ->run([
-                'curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer',
-                'runuser -l served -c "composer config --global repos.packagist composer https://packagist.org"',
-                'runuser -l served -c "composer global require hirak/prestissimo"'
-            ]);
 
         $command
             ->comment('Set work dir', true)
