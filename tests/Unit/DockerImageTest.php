@@ -9,6 +9,7 @@ use Sinnbeck\LaravelServed\Images\NginxImage;
 use Sinnbeck\LaravelServed\Images\MysqlImage;
 use Sinnbeck\LaravelServed\Images\RedisImage;
 use Sinnbeck\LaravelServed\Images\ApacheImage;
+use Sinnbeck\LaravelServed\Images\MailhogImage;
 
 class DockerImageTest extends TestCase
 {
@@ -54,6 +55,15 @@ class DockerImageTest extends TestCase
     }
 
     /** @test */
+    public function it_can_make_postgres_docker_file()
+    {
+        $image = new RedisImage('test', [], app(Shell::class));
+        $content = $image->writeDockerFile();
+
+        $this->assertEquals($this->getExpectedContent('DockerFile-redis'), $content);
+    }
+
+    /** @test */
     public function it_can_make_redis_docker_file()
     {
         $image = new RedisImage('test', [], app(Shell::class));
@@ -63,11 +73,13 @@ class DockerImageTest extends TestCase
     }
 
     /** @test */
-    public function it_can_make_postgres_docker_file()
+    public function it_can_make_mailhog_docker_file()
     {
-        $image = new RedisImage('test', [], app(Shell::class));
+        $image = new MailhogImage('test', [], app(Shell::class));
         $content = $image->writeDockerFile();
 
-        $this->assertEquals($this->getExpectedContent('DockerFile-redis'), $content);
+        $this->assertEquals($this->getExpectedContent('DockerFile-mailhog'), $content);
     }
+
+
 }

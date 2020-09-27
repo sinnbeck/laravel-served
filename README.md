@@ -153,6 +153,15 @@ Add redis to the modules in php and then add redis to your extras array.
 ```
 Change your `REDIS_HOST` in .env to whatever you use as the key (eg. redis)
 
+### Mailhog
+Add mailhog to your extras array.
+```
+'mail' => [
+            'service' => 'mailhog',
+            'port' => 8025
+        ]
+```
+Change your `MAIL_HOST` in .env to whatever you use as the key (eg. mail), and change `MAIL_PORT`to 1025. To see the mailbox, open http://localhost:8025 in your browser (replace 8025 with whatever port you set in config)
 
 ## Testing
 To run tests with 
