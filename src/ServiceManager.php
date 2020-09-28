@@ -11,6 +11,7 @@ use Sinnbeck\LaravelServed\Services\MysqlService;
 use Sinnbeck\LaravelServed\Services\NginxService;
 use Sinnbeck\LaravelServed\Services\PhpService;
 use Sinnbeck\LaravelServed\Shell\Shell;
+use Sinnbeck\LaravelServed\Services\MailhogService;
 use Sinnbeck\LaravelServed\Services\PostgresService;
 
 class ServiceManager
@@ -115,6 +116,9 @@ class ServiceManager
 
             case 'redis':
                 return new  RedisService($name, $config, $this->shell);
+
+            case 'mailhog':
+                return new  MailhogService($name, $config, $this->shell);
 
             case null:
                 throw new Exception('No service specified for ' . $name);

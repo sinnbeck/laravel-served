@@ -87,7 +87,7 @@ class Docker
      */
     public function listContainers()
     {
-        $name = 'served_' . config('served.name') . '_';
+        $name = 'served_' . app('served.name') . '_';
         $containers = $this->shell->exec('docker ps --all --filter "name=' . $name . '" --format "{{.ID}}|{{.Names}}|{{.Image}}|{{.Status}}|{{.Ports}}"');
         $formatted = collect(explode("\n", $containers))->filter()->map(function ($row) {
             return explode('|', $row);

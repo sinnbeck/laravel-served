@@ -48,7 +48,7 @@ class ServedTearDownCommand extends Command
     {
         //Done: Check if network exists / create it
         $this->checkPrerequisites($docker);
-        $servedName = config('served.name');
+        $servedName = app('served.name');
 
         $onlyService = $this->argument('service');
 

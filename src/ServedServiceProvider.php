@@ -33,7 +33,7 @@ class ServedServiceProvider extends ServiceProvider
     {
         $this->publishes([
             __DIR__ . '/config/served.php' => config_path('served.php')
-        ], 'config');
+        ], 'served-config');
 
         if ($this->app->runningInConsole()) {
             $this->commands([
@@ -46,8 +46,8 @@ class ServedServiceProvider extends ServiceProvider
             ]);
         }
 
-        //$this->app->singleton('served', function () {
-        //    return new ServiceManager(app(Shell::class));
-        //});
+        $this->app->singleton('served.name', function () {
+            return (new ServedName())->projectName();
+        });
     }
 }
