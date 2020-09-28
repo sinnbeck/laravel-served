@@ -197,7 +197,7 @@ abstract class Image implements ImageInterface
      */
     protected function projectName(): string
     {
-        return config('served.name');
+        return app('served.name');
     }
 
     /**

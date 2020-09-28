@@ -46,8 +46,8 @@ class ServedServiceProvider extends ServiceProvider
             ]);
         }
 
-        //$this->app->singleton('served', function () {
-        //    return new ServiceManager(app(Shell::class));
-        //});
+        $this->app->singleton('served.name', function () {
+            return (new ServedName())->projectName();
+        });
     }
 }

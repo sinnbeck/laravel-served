@@ -49,7 +49,7 @@ class ServedStartCommand extends Command
     public function handle(Docker $docker, ServiceManager $manager): int
     {
         $this->checkPrerequisites($docker);
-        $servedName = config('served.name');
+        $servedName = app('served.name');
         $docker->ensureNetworkExists($servedName);
 
         $onlyService = $this->argument('service');
