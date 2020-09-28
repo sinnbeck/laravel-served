@@ -175,9 +175,9 @@ abstract class Container
     /**
      * @return string
      */
-    protected function projectName(): string
+    public function projectName(): string
     {
-        return config('served.name');
+        return app('served.name');
     }
 
     /**

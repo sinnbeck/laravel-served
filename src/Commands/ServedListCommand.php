@@ -49,6 +49,7 @@ class ServedListCommand extends Command
         $containers = $docker->listContainers();
 
         $this->drawLogo();
+        $this->comment(app('served.name'));
         $this->table($containers->slice(0, 1)->toArray(), $containers->slice(1)->toArray());
 
         return 0;
