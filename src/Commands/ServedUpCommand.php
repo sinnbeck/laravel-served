@@ -49,7 +49,7 @@ class ServedUpCommand extends Command
     public function handle(Docker $docker, ServiceManager $manager): int
     {
         $this->checkPrerequisites($docker);
-        $servedName = config('served.name');
+        $servedName = app('served.name');
         $this->info('Creating network: ' . $servedName);
         $docker->ensureNetworkExists($servedName);
 

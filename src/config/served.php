@@ -10,7 +10,7 @@ return [
     | It is best to make sure that this value is unique for each project.
     |
     */
-    'name' => env('SERVED_NAME', 'served'),
+    'name' => env('SERVED_NAME'),
 
     /*
     |--------------------------------------------------------------------------

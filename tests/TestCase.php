@@ -3,6 +3,7 @@
 namespace Tests;
 
 use Orchestra\Testbench\TestCase as BaseTestCase;
+use Sinnbeck\LaravelServed\ServedServiceProvider;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -14,6 +15,11 @@ abstract class TestCase extends BaseTestCase
     protected function getExpectedContent($filename)
     {
         return file_get_contents(__DIR__ . '/expected/'  . $filename);
+    }
+
+    protected function getPackageProviders($app)
+    {
+        return [ServedServiceProvider::class];
     }
 
 }
