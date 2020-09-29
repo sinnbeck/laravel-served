@@ -40,8 +40,6 @@ $ php artisan served:up
 ```
 If this is your first time running the command, it will build the images first before starting the containers. If you have run the `served:up` command before, docker will quickly check the images for updates and served will start the containers again.
 
->BEWARE: It currently isn't possible having multiple projects running with same base configuration, as that will lead to naming conflicts! If running more than one project on the same machine, please make sure to read the configuration part of the documentation!
-
 ## Starting and stopping served
 After your first run, you can easily start and stop your containers without having to build either images or containers. Simply run
 ```
