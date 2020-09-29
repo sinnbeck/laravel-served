@@ -75,9 +75,9 @@ To get started you need to publish the config file.
 $ php artisan vendor:publish --provider="Sinnbeck\LaravelServed\ServedServiceProvider"
 ```
 ### Name
-To avoid naming conflicts between projects, you can define your own name for served configuration. This name will be used when creating network, images and containers. Make sure it is unique between projects!
+To avoid naming conflicts between projects, you can define your own name for served configuration. This name will be used when creating network, images and containers. Make sure it is unique between projects! If no name is set, served will use the folder name of the laravel installation (a slug version)
 
-It is important that the name only consists of letters, numbers, - and _. Other special characters can result in issues and should be avoided!
+It is important the name only consists of letters, numbers, `.`, `-` and `_`. Other special characters will throw an exception.
 
 If you at some point wish to chance the name after having used served on a project, it is important to teardown both images and containers using `served:teardown`. If you have already changed the name and are having issues getting your containers up and running with the new name, just chance the name back, run teardown, and set it to the new name once more.
 
