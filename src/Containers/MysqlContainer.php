@@ -17,13 +17,11 @@ class MysqlContainer extends Container
      */
     protected $alias = 'mysql';
 
-    /**
-     * @return void
-     */
-    public function run(): void
-    {
-        $this->shell->run('docker run -d --restart always --network="${:network}" --name "${:container_name}" --network-alias="${:alias}" -p "${:port}":3306 -v "${:volume}":/var/lib/mysql/ "${:image_name}"', $this->env());
-    }
+    protected $dockerRunCommand = '--name "${:container_name}" \
+        --network="${:network}" \
+        --network-alias="${:alias}" \
+        -p="${:port}":3306 \
+        -v="${:volume}":/var/lib/mysql/';
 
     /**
      * @return array

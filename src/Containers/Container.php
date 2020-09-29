@@ -25,6 +25,8 @@ abstract class Container
      */
     protected $shell;
 
+    protected $dockerRunCommand = '';
+
     /**
      * Container constructor.
      * @param string $name
@@ -52,7 +54,17 @@ abstract class Container
 
     public function run()
     {
-        //
+        $this->shell->run($this->getDockerRunCommand(), $this->env());
+    }
+
+    public function getDockerRunCommand()
+    {
+        return 'docker run -d --restart always ' . $this->dockerRunCommand . ' "${:image_name}"';
+    }
+
+    public function getEnv()
+    {
+        return $this->env();
     }
 
     /**
