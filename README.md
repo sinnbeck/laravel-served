@@ -1,5 +1,9 @@
 # Laravel Served
 
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/sinnbeck/laravel-served.svg?style=flat)](https://packagist.org/packages/tightenco/takeout)
+[![Downloads on Packagist](https://img.shields.io/packagist/dt/sinnbeck/laravel-served.svg?style=flat)](https://packagist.org/packages/tightenco/takeout)
+![tests](https://github.com/sinnbeck/laravel-served/workflows/tests/badge.svg)
+
 Laravel Served is a dockerized version of `php artisan serve`. It makes it easy to quickly start a development environment the laravel way (through a config file).
 
 The only things you need to get started is
