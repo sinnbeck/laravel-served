@@ -1,5 +1,9 @@
 # Laravel Served
 
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/sinnbeck/laravel-served.svg?style=flat)](https://packagist.org/packages/sinnbeck/laravel-served)
+[![Downloads on Packagist](https://img.shields.io/packagist/dt/sinnbeck/laravel-served.svg?style=flat)](https://packagist.org/packages/sinnbeck/laravel-served)
+![tests](https://github.com/sinnbeck/laravel-served/workflows/tests/badge.svg)
+
 Laravel Served is a dockerized version of `php artisan serve`. It makes it easy to quickly start a development environment the laravel way (through a config file).
 
 The only things you need to get started is
@@ -40,8 +44,6 @@ $ php artisan served:up
 ```
 If this is your first time running the command, it will build the images first before starting the containers. If you have run the `served:up` command before, docker will quickly check the images for updates and served will start the containers again.
 
->BEWARE: It currently isn't possible having multiple projects running with same base configuration, as that will lead to naming conflicts! If running more than one project on the same machine, please make sure to read the configuration part of the documentation!
-
 ## Starting and stopping served
 After your first run, you can easily start and stop your containers without having to build either images or containers. Simply run
 ```
@@ -75,9 +77,9 @@ To get started you need to publish the config file.
 $ php artisan vendor:publish --provider="Sinnbeck\LaravelServed\ServedServiceProvider"
 ```
 ### Name
-To avoid naming conflicts between projects, you can define your own name for served configuration. This name will be used when creating network, images and containers. Make sure it is unique between projects!
+To avoid naming conflicts between projects, you can define your own name for served configuration. This name will be used when creating network, images and containers. Make sure it is unique between projects! If no name is set, served will use the folder name of the laravel installation (a slug version)
 
-It is important that the name only consists of letters, numbers, - and _. Other special characters can result in issues and should be avoided!
+It is important the name only consists of letters, numbers, `.`, `-` and `_`. Other special characters will throw an exception.
 
 If you at some point wish to chance the name after having used served on a project, it is important to teardown both images and containers using `served:teardown`. If you have already changed the name and are having issues getting your containers up and running with the new name, just chance the name back, run teardown, and set it to the new name once more.
 
@@ -172,7 +174,7 @@ Add mailhog to your extras array.
 Change your `MAIL_HOST` in .env to whatever you use as the key (eg. mail), and change `MAIL_PORT`to 1025. To see the mailbox, open http://localhost:8025 in your browser (replace 8025 with whatever port you set in config)
 
 ## Testing
-To run tests with 
+Run tests with 
 ```
 $ composer test
 ```

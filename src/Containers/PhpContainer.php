@@ -3,15 +3,20 @@
 namespace Sinnbeck\LaravelServed\Containers;
 
 use Illuminate\Support\Arr;
+use Sinnbeck\LaravelServed\Shell\Shell;
 
 class PhpContainer extends Container
 {
-    /**
-     * @return void
-     */
-    public function run(): void
+    protected $dockerRunCommand = '--name "${:container_name}" \
+        --user=served:served \
+        --network="${:network}" \
+        --network-alias=served_php \
+        -v="${:local_dir}":/app';
+
+    public function __construct(string $name, $config, Shell $shell)
     {
-        $this->shell->run('docker run -d --restart=always --network="${:network}" --user=served:served --name="${:container_name}" --network-alias=served_php ' . $this->volumes() . ' -v="${:local_dir}":/app "${:image_name}"', $this->env());
+        parent::__construct($name, $config, $shell);
+        $this->dockerRunCommand .= $this->volumes();
     }
 
     /**
@@ -37,8 +42,8 @@ class PhpContainer extends Container
             return '';
         }
 
-        return collect($volumes)->map(function ($item) {
-            return '-v "' . $item . '"';
+        return ' ' . collect($volumes)->map(function ($item) {
+            return '-v="' . $item . '"';
         })->implode(' ');
     }
 }

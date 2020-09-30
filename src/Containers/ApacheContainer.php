@@ -9,13 +9,10 @@ class ApacheContainer extends Container
      */
     protected $port = '8080';
 
-    /**
-     * @return void
-     */
-    public function run(): void
-    {
-        $this->shell->run('docker run -d --restart always --network="${:network}" --name "${:container_name}" -p "${:port}":80 -v "${:local_dir}":/app "${:image_name}"', $this->env());
-    }
+    protected $dockerRunCommand = '--name "${:container_name}" \
+        --network="${:network}" \
+        -p="${:port}":80 \
+        -v="${:local_dir}":/app';
 
     /**
      * @return array
