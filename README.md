@@ -1,7 +1,7 @@
 # Laravel Served
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/sinnbeck/laravel-served.svg?style=flat)](https://packagist.org/packages/tightenco/takeout)
-[![Downloads on Packagist](https://img.shields.io/packagist/dt/sinnbeck/laravel-served.svg?style=flat)](https://packagist.org/packages/tightenco/takeout)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/sinnbeck/laravel-served.svg?style=flat)](https://packagist.org/packages/sinnbeck/laravel-served)
+[![Downloads on Packagist](https://img.shields.io/packagist/dt/sinnbeck/laravel-served.svg?style=flat)](https://packagist.org/packages/sinnbeck/laravel-served)
 ![tests](https://github.com/sinnbeck/laravel-served/workflows/tests/badge.svg)
 
 Laravel Served is a dockerized version of `php artisan serve`. It makes it easy to quickly start a development environment the laravel way (through a config file).
@@ -174,7 +174,7 @@ Add mailhog to your extras array.
 Change your `MAIL_HOST` in .env to whatever you use as the key (eg. mail), and change `MAIL_PORT`to 1025. To see the mailbox, open http://localhost:8025 in your browser (replace 8025 with whatever port you set in config)
 
 ## Testing
-To run tests with 
+Run tests with 
 ```
 $ composer test
 ```
