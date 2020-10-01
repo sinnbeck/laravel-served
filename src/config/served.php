@@ -50,7 +50,7 @@ return [
         'mysql' => [
             'service' => 'mysql',
             'version' => '5.7',
-            'port' => 3306,
+            'port' => env('SERVED_EXTERNAL_DB_PORT', 3306),
             'root_password' => 'password',
             'database' => env('DB_DATABASE', 'laravel'),
             'username' => env('DB_USERNAME', 'laravel'),
