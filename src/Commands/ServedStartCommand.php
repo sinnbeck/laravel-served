@@ -61,6 +61,9 @@ class ServedStartCommand extends Command
             return 1;
         }
 
+        $this->comment('Ensuring old containers are stopped ...');
+        $this->callSilent('served:stop');
+
         $servedName = app('served.name');
         $docker->ensureNetworkExists($servedName);
 
