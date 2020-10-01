@@ -10,6 +10,7 @@ use Sinnbeck\LaravelServed\Images\MysqlImage;
 use Sinnbeck\LaravelServed\Images\RedisImage;
 use Sinnbeck\LaravelServed\Images\ApacheImage;
 use Sinnbeck\LaravelServed\Images\MailhogImage;
+use Sinnbeck\LaravelServed\Images\MemcachedImage;
 
 class DockerImageTest extends TestCase
 {
@@ -70,6 +71,15 @@ class DockerImageTest extends TestCase
         $content = $image->writeDockerFile();
 
         $this->assertEquals($this->getExpectedContent('DockerFile-redis'), $content);
+    }
+
+    /** @test */
+    public function it_can_make_memcached_docker_file()
+    {
+        $image = new MemcachedImage('test', [], app(Shell::class));
+        $content = $image->writeDockerFile();
+
+        $this->assertEquals($this->getExpectedContent('DockerFile-memcached'), $content);
     }
 
     /** @test */

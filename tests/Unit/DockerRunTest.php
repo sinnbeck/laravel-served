@@ -11,6 +11,7 @@ use Sinnbeck\LaravelServed\Containers\RedisContainer;
 use Sinnbeck\LaravelServed\Containers\ApacheContainer;
 use Sinnbeck\LaravelServed\Containers\MailhogContainer;
 use Sinnbeck\LaravelServed\Containers\PostgresContainer;
+use Sinnbeck\LaravelServed\Containers\MemcachedContainer;
 
 class DockerRunTest extends TestCase
 {
@@ -209,6 +210,36 @@ class DockerRunTest extends TestCase
             'container_name' => 'served_served_redis_test',
             'image_name'     => 'served/served_redis_test',
             'alias'          => 'redis_test',
+
+        ];
+
+        $this->assertEquals($expected, $container->getEnv());
+
+    }
+
+    /** @test */
+    public function it_gets_correct_memcached_run_command()
+    {
+        $container = new MemcachedContainer('memcached_test', [], app(Shell::class));
+
+        $expected = 'docker run -d --restart always --name "${:container_name}" \
+        --network="${:network}" \
+        --network-alias="${:alias}" "${:image_name}"';
+
+        $this->assertEquals($expected, $container->getDockerRunCommand());
+
+    }
+
+    /** @test */
+    public function it_gets_correct_memcached_env()
+    {
+        $container = new MemcachedContainer('memcached_test', [], app(Shell::class));
+
+        $expected = [
+            'network'        => 'served',
+            'container_name' => 'served_served_memcached_test',
+            'image_name'     => 'served/served_memcached_test',
+            'alias'          => 'memcached_test',
 
         ];
 

@@ -13,6 +13,7 @@ use Sinnbeck\LaravelServed\Services\PhpService;
 use Sinnbeck\LaravelServed\Shell\Shell;
 use Sinnbeck\LaravelServed\Services\MailhogService;
 use Sinnbeck\LaravelServed\Services\PostgresService;
+use Sinnbeck\LaravelServed\Services\MemcachedService;
 
 class ServiceManager
 {
@@ -116,6 +117,9 @@ class ServiceManager
 
             case 'redis':
                 return new  RedisService($name, $config, $this->shell);
+
+            case 'memcached':
+                return new  MemcachedService($name, $config, $this->shell);
 
             case 'mailhog':
                 return new  MailhogService($name, $config, $this->shell);

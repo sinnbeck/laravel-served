@@ -163,6 +163,15 @@ Add redis to the modules in php and then add redis to your extras array.
 ```
 Change your `REDIS_HOST` in .env to whatever you use as the key (eg. redis)
 
+### Memcached
+Add memcached to the modules in php and then add memcached to your extras array.
+```
+'memcached' => [
+            'service' => 'memcached',
+        ]
+```
+Change your `CACHE_DRIVER` in .env to `memcached` and add `MEMCACHED_HOST` and set it to whatever you use as the key (eg. memcached)
+
 ### Mailhog
 Add mailhog to your extras array.
 ```
