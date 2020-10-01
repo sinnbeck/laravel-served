@@ -1,3 +1,4 @@
+![Laravel Served](logo.jpg?version=1)
 # Laravel Served
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/sinnbeck/laravel-served.svg?style=flat)](https://packagist.org/packages/sinnbeck/laravel-served)
