@@ -2,6 +2,7 @@
 
 namespace Sinnbeck\LaravelServed\Docker;
 
+use Illuminate\Support\Str;
 use Sinnbeck\LaravelServed\Exceptions\DockerNotInstalledException;
 use Sinnbeck\LaravelServed\Exceptions\DockerNotRunningException;
 use Sinnbeck\LaravelServed\Shell\Shell;
@@ -87,7 +88,7 @@ class Docker
      */
     public function listContainers()
     {
-        $name = 'served_' . app('served.name') . '_';
+        $name = $this->makeName();
         $containers = $this->shell->exec('docker ps --all --filter "name=' . $name . '" --format "{{.ID}}|{{.Names}}|{{.Image}}|{{.Status}}|{{.Ports}}"');
         $formatted = collect(explode("\n", $containers))->filter()->map(function ($row) {
             return explode('|', $row);
@@ -97,6 +98,24 @@ class Docker
             'ID', 'Name', 'Image', 'Status', 'Used ports'
         ]);
 
+    }
+
+    public function getUsedPort($name)
+    {
+        $name = $this->makeName($name);
+        try {
+            $usedPort = $this->shell->exec('docker port ' . $name);
+
+        } catch (ProcessFailedException $e) {
+            return null;
+        }
+
+        return intval(Str::afterLast(trim($usedPort), ':'));
+    }
+
+    protected function makeName($name = '')
+    {
+        return sprintf('served_%s_%s', app('served.name'), $name);
     }
 
 }

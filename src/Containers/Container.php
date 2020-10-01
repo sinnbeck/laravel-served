@@ -27,6 +27,8 @@ abstract class Container
 
     protected $dockerRunCommand = '';
 
+    protected $port = null;
+
     /**
      * Container constructor.
      * @param string $name
@@ -170,7 +172,7 @@ abstract class Container
     public function setPort(string $port): self
     {
         if ($port) {
-            $this->port = $port;
+            $this->port = (int) $port;
         }
 
         return $this;
@@ -179,7 +181,7 @@ abstract class Container
     /**
      * @return string
      */
-    public function port(): string
+    public function port(): ?int
     {
         return $this->port;
     }

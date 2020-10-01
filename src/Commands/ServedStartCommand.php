@@ -4,14 +4,17 @@ namespace Sinnbeck\LaravelServed\Commands;
 
 use Exception;
 use Illuminate\Console\Command;
+use Sinnbeck\LaravelServed\Commands\Traits\PortCheck;
 use Sinnbeck\LaravelServed\Commands\Traits\DockerCheck;
 use Sinnbeck\LaravelServed\Commands\Traits\RunningConfig;
 use Sinnbeck\LaravelServed\Docker\Docker;
 use Sinnbeck\LaravelServed\ServiceManager;
+use Sinnbeck\LaravelServed\Exceptions\PortAlreadyInUseException;
 
 class ServedStartCommand extends Command
 {
     use DockerCheck,
+        PortCheck,
         RunningConfig;
 
     /**
@@ -49,6 +52,15 @@ class ServedStartCommand extends Command
     public function handle(Docker $docker, ServiceManager $manager): int
     {
         $this->checkPrerequisites($docker);
+        try {
+            $this->checkPortConflicts($docker, $manager);
+
+        }
+        catch (PortAlreadyInUseException $e) {
+            $this->error($e->getMessage());
+            return 1;
+        }
+
         $servedName = app('served.name');
         $docker->ensureNetworkExists($servedName);
 
