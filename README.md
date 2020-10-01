@@ -129,15 +129,17 @@ Port is used for when connecting to mysql from outside of laravel.
 Eg. 127.0.0.1:3306. 
 
 To connect to the database from laravel you need to use the config key (in the example that would be `mysql`) as hostname. The port is the default for mysql (3306) and not the one specified in the config.
+
+If you wish to override the port you use connect to mysql from outside your docker, you can do so by adding 'SERVED_EXTERNAL_DB_PORT' to your .env 
 ```
 'mysql' => [
             'service' => 'mysql',
             'version' => '5.7',
-            'port' => 3306,
+            'port' => env('SERVED_EXTERNAL_DB_PORT', 3306),
             'root_password' => 'password',
-            'database' => 'laravel',
-            'username' => 'laravel',
-            'password' => 'password',
+            'database' => env('DB_DATABASE', 'laravel'),
+            'username' => env('DB_USERNAME', 'laravel'),
+            'password' => env('DB_PASSWORD', 'password'),
         ],
 ```
 
