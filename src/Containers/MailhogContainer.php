@@ -8,6 +8,7 @@ class MailhogContainer extends Container
      * @var string
      */
     protected $port = '8025';
+    protected $internal_port = '8025';
 
     protected $dockerRunCommand = '--name "${:container_name}" \
         --network="${:network}" \

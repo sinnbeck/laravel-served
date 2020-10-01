@@ -40,11 +40,9 @@ return [
     ],
     'web' => [
         'service' => 'nginx', //or apache
-        'version' => '1.9.2', //apache only supports latest!
+        'version' => '1.9.2', //apache currently only supports latest!
         'port' => env('SERVED_WEB_PORT', 8095),
-        'https' => [
-            'enabled' => false,
-        ],
+        'ssl_port' => env('SERVED_WEB_SSL_PORT', 4443),
     ],
     'extras' => [
         'mysql' => [

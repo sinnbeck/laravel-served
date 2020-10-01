@@ -22,14 +22,15 @@ class ApacheImage extends Image
     /**
      * @var string
      */
-    protected $buildCommand = 'docker build -t  "${:imagename}" . -f "${:dockerfile}"';
+    protected $buildCommand = 'docker build -t "${:imagename}" . -f "${:dockerfile}"';
 
     /**
      * @return void
      */
     protected function prepareConfFiles(): void
     {
-        $this->copyDockerFile(__DIR__ . '/stubs/nginx.conf', 'default.conf');
+        $this->copyDockerFile(__DIR__ . '/stubs/localhost.crt', 'localhost.crt');
+        $this->copyDockerFile(__DIR__ . '/stubs/localhost.key', 'localhost.key');
     }
 
     /**
@@ -38,8 +39,7 @@ class ApacheImage extends Image
     protected function prepareEnv(): array
     {
         return [
-            'imagename' => $this->makeImageName(),
-            'uid' => getmyuid(),
+            'imagename'  => $this->makeImageName(),
             'dockerfile' => $this->findDockerFile(),
         ];
     }
@@ -50,10 +50,12 @@ class ApacheImage extends Image
     public function writeDockerFile(): string
     {
         $command = $this->dockerFileBuilder
-            ->from($this->imageName(), $this->imageTag())
+            ->from($this->imageName(), $this->tag)
             ->env('WEB_PHP_SOCKET', 'served_php:9000')
             ->env('WEB_DOCUMENT_ROOT', '/app/public')
-            ->env('WEB_PHP_TIMEOUT', '60');
+            ->env('WEB_PHP_TIMEOUT', '60')
+            ->copy($this->storageDirectory(true) . 'localhost.key', '/opt/docker/etc/httpd/ssl/server.key')
+            ->copy($this->storageDirectory(true) . 'localhost.crt', '/opt/docker/etc/httpd/ssl/server.crt');
 
         return (string)$command;
     }

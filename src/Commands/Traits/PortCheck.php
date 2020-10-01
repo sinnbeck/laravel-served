@@ -4,6 +4,7 @@ namespace Sinnbeck\LaravelServed\Commands\Traits;
 
 use Sinnbeck\LaravelServed\Docker\Docker;
 use Sinnbeck\LaravelServed\ServiceManager;
+use Sinnbeck\LaravelServed\Services\Service;
 use Sinnbeck\LaravelServed\Exceptions\PortAlreadyInUseException;
 
 trait PortCheck
@@ -16,20 +17,35 @@ trait PortCheck
             return !!$service->container()->port();
         });
 
-        foreach ($servicesWithPort as $service)
-        {
+        foreach ($servicesWithPort as $service) {
             $port = $service->container()->port();
-            if ($port == $docker->getUsedPort($service->name())) {
+            $internalPort = $service->container()->internalPort();
+            $sslPort = $service->container()->sslPort();
+            $internalSslPort = $service->container()->internalSslPort();
+            if ($this->testPort($docker, $service, $port, $internalPort) && $this->testPort($docker, $service, $sslPort, $internalSslPort)) {
                 continue;
             }
-
-            $connection = @fsockopen('localhost', $port);
-
-            if (is_resource($connection))
-            {
-                fclose($connection);
-                throw new PortAlreadyInUseException('Port ' . $port . ' is in use!');
-            }
         }
+    }
+
+    protected function testPort(Docker $docker, Service $service, ?int $port = null, ?int $internalPort = null): bool
+    {
+        if (!$port) {
+            return true;
+        }
+
+        if ($port == $docker->getUsedPort($service->name(), $internalPort)) {
+            return true;
+        }
+
+        $connection = @fsockopen('localhost', $port);
+
+        if (is_resource($connection))
+        {
+            fclose($connection);
+            throw new PortAlreadyInUseException('Port ' . $port . ' is in use!');
+        }
+
+        return true;
     }
 }

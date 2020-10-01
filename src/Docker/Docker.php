@@ -100,11 +100,11 @@ class Docker
 
     }
 
-    public function getUsedPort($name)
+    public function getUsedPort($name, $internalPort)
     {
         $name = $this->makeName($name);
         try {
-            $usedPort = $this->shell->exec('docker port ' . $name);
+            $usedPort = $this->shell->exec('docker port ' . $name . ' ' . $internalPort);
 
         } catch (ProcessFailedException $e) {
             return null;

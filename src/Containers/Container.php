@@ -28,6 +28,10 @@ abstract class Container
     protected $dockerRunCommand = '';
 
     protected $port = null;
+    protected $ssl_port = null;
+
+    protected $internal_port = null;
+    protected $internal_ssl_port = null;
 
     /**
      * Container constructor.
@@ -76,7 +80,11 @@ abstract class Container
     {
         foreach ($this->config as $key => $value) {
             if ($key === 'port') {
-                $this->setPort($value);
+                $this->setPort((int) $value);
+            }
+
+            if ($key === 'ssl_port') {
+                $this->setSslPort((int) $value);
             }
         }
     }
@@ -166,10 +174,10 @@ abstract class Container
     }
 
     /**
-     * @param string $port
+     * @param int $port
      * @return $this
      */
-    public function setPort(string $port): self
+    public function setPort(int $port): self
     {
         if ($port) {
             $this->port = (int) $port;
@@ -179,11 +187,48 @@ abstract class Container
     }
 
     /**
-     * @return string
+     * @return int
      */
     public function port(): ?int
     {
         return $this->port;
+    }
+
+    /**
+     * @param int $port
+     * @return $this
+     */
+    public function setSslPort(int $port): self
+    {
+        if ($port) {
+            $this->ssl_port = (int) $port;
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function sslPort(): ?int
+    {
+        return $this->ssl_port;
+    }
+
+    /**
+     * @return int
+     */
+    public function internalPort(): ?int
+    {
+        return $this->internal_port;
+    }
+
+    /**
+     * @return int
+     */
+    public function internalSslPort(): ?int
+    {
+        return $this->internal_ssl_port;
     }
 
     /**

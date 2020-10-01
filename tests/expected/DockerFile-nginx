@@ -2,3 +2,5 @@ FROM library/nginx:1.19
 
 # Copy in new nginx config
 COPY storage/app/served/test/default.conf /etc/nginx/conf.d/default.conf
+COPY storage/app/served/test/localhost.key /etc/nginx/ssl/server.key
+COPY storage/app/served/test/localhost.crt /etc/nginx/ssl/server.crt

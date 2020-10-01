@@ -11,6 +11,7 @@ class PostgresContainer extends Container
      * @var string
      */
     protected $port = '54320';
+    protected $internal_port = '5432';
 
     /**
      * @var string

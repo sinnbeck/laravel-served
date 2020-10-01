@@ -108,18 +108,17 @@ The array of modules can be filled with any module found in the url below (excep
 https://github.com/mlocati/docker-php-extension-installer
 
 ### Web
-Served currently supports nginx and apache. Simply the type to the servertype you want, and set the correct version (or delete the version to have served use a sensible default). Apache currently only supports the latest version and will ignore any version set.
+Served currently supports nginx and apache. Simply service to whichever you want to use, and set the correct version (or delete the version to have served use a sensible default). Apache currently only supports the latest version and will ignore any version set.
 
 ```
 'web' => [
         'service' => 'nginx', //or apache
         'version' => '1.9.2',
-        'port' => env('SERVED_WEB_PORT', 8090),
-        'https' => [
-            'enabled' => false,
-        ],
+        'port' => env('SERVED_WEB_PORT', 8095),
+        'ssl_port' => env('SERVED_WEB_SSL_PORT', 4443),
     ],
 ```
+If you are trying to use the https address, you will be shown a certificate error. To fix this in Chrome, open chrome://settings/certificates and select the Authorities tab. Click import and find the `localhost.crt` in your `/storage/app/served/web/` directory
 
 ## Extras
 Here you can define extra images that you wish to run. The array key is used as name, meaning it is possible to run the same service more than once, with different names (eg. two mysql instances).

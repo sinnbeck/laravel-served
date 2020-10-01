@@ -49,7 +49,9 @@ class NginxImage extends Image
             ->newLine()
             ->comment('Copy in new nginx config')
 //            ->copy('storage/served/nginx/default.conf', '/etc/nginx/conf.d/default.conf');
-            ->copy($this->storageDirectory(true) . 'default.conf', '/etc/nginx/conf.d/default.conf');
+            ->copy($this->storageDirectory(true) . 'default.conf', '/etc/nginx/conf.d/default.conf')
+            ->copy($this->storageDirectory(true) . 'localhost.key', '/etc/nginx/ssl/server.key')
+            ->copy($this->storageDirectory(true) . 'localhost.crt', '/etc/nginx/ssl/server.crt');
 
         return (string)$command;
     }

@@ -11,6 +11,7 @@ class MysqlContainer extends Container
      * @var string
      */
     protected $port = '3306';
+    protected $internal_port = '3306';
 
     /**
      * @var string

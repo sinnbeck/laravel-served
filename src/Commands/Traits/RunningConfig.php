@@ -17,6 +17,9 @@ trait RunningConfig
         $this->line('      Laravel has been', 'fg=blue');
         $this->drawLogo();
         $url = 'http://localhost:' . $manager->web()->container()->port();
-        $this->line('<fg=green>Visit the development server at:</> <fg=white><href="' . $url . '">'. $url . '</></>');
+        $secureUrl = 'https://localhost:' . $manager->web()->container()->sslPort();
+        $this->line('<fg=green>Visit the development server at:</>');
+        $this->line('<fg=white><href="' . $url . '">'. $url . '</></>');
+        $this->line('<fg=white><href="' . $secureUrl . '">'. $secureUrl . '</></>');
     }
 }

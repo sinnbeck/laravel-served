@@ -30,6 +30,7 @@ class DockerRunTest extends TestCase
         $expected = 'docker run -d --restart always --name "${:container_name}" \
         --network="${:network}" \
         -p="${:port}":80 \
+        -p="${:ssl_port}":443 \
         -v="${:local_dir}":/app "${:image_name}"';
 
         $this->assertEquals($expected, $container->getDockerRunCommand());
@@ -39,13 +40,14 @@ class DockerRunTest extends TestCase
     /** @test */
     public function it_gets_correct_apache_env()
     {
-        $container = new ApacheContainer('apache_test', ['port' => 8090], app(Shell::class));
+        $container = new ApacheContainer('apache_test', ['port' => 8090, 'ssl_port' => 4443], app(Shell::class));
 
         $expected = [
             'network'        => 'served',
             'container_name' => 'served_served_apache_test',
             'image_name'     => 'served/served_apache_test',
-            'port'           => '8090',
+            'port'           => 8090,
+            'ssl_port'       => 4443,
             'local_dir'      => '/path',
 
         ];
@@ -62,6 +64,7 @@ class DockerRunTest extends TestCase
         $expected = 'docker run -d --restart always --name "${:container_name}" \
         --network="${:network}" \
         -p="${:port}":80 \
+        -p="${:ssl_port}":443 \
         -v="${:local_dir}":/app "${:image_name}"';
 
         $this->assertEquals($expected, $container->getDockerRunCommand());
@@ -71,13 +74,14 @@ class DockerRunTest extends TestCase
     /** @test */
     public function it_gets_correct_nginx_env()
     {
-        $container = new NginxContainer('nginx_test', ['port' => 8090], app(Shell::class));
+        $container = new NginxContainer('nginx_test', ['port' => 8090, 'ssl_port' => 443], app(Shell::class));
 
         $expected = [
             'network'        => 'served',
             'container_name' => 'served_served_nginx_test',
             'image_name'     => 'served/served_nginx_test',
-            'port'           => '8090',
+            'port'           => 8090,
+            'ssl_port'       => 443,
             'local_dir'      => '/path',
 
         ];
@@ -142,7 +146,7 @@ class DockerRunTest extends TestCase
             'network'        => 'served',
             'container_name' => 'served_served_mysql_test',
             'image_name'     => 'served/served_mysql_test',
-            'port'           => '3212',
+            'port'           => 3212,
             'alias'          => 'mysql_test',
             'volume'         => 'served_mysql_test',
 
@@ -176,7 +180,7 @@ class DockerRunTest extends TestCase
             'network'        => 'served',
             'container_name' => 'served_served_postgres_test',
             'image_name'     => 'served/served_postgres_test',
-            'port'           => '3212',
+            'port'           => 3212,
             'alias'          => 'postgres_test',
             'volume'         => 'served_postgres_test',
 

@@ -2,3 +2,5 @@ FROM webdevops/apache:latest
 ENV WEB_PHP_SOCKET=served_php:9000
 ENV WEB_DOCUMENT_ROOT=/app/public
 ENV WEB_PHP_TIMEOUT=60
+COPY storage/app/served/test/localhost.key /opt/docker/etc/httpd/ssl/server.key
+COPY storage/app/served/test/localhost.crt /opt/docker/etc/httpd/ssl/server.crt
