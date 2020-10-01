@@ -1,4 +1,5 @@
-![Laravel Served](logo.jpg?version=1)
+<img alt="Laravel Served" src="https://github.com/sinnbeck/laravel-served/raw/master/logo.jpg?version=1" style="width:300px">
+
 # Laravel Served
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/sinnbeck/laravel-served.svg?style=flat)](https://packagist.org/packages/sinnbeck/laravel-served)
