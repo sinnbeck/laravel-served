@@ -23,6 +23,7 @@ These are the available services that Served provide. More will be added in the 
 * Mysql
 * Postgres
 * Redis
+* Memcached
 * Mailhog
 
 ## Installation
