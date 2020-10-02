@@ -25,6 +25,8 @@ class NginxImage extends Image
     protected function prepareConfFiles(): void
     {
         $this->copyDockerFile(__DIR__ . '/stubs/nginx.conf', 'default.conf');
+        $this->copyDockerFile(__DIR__ . '/stubs/localhost.crt', 'localhost.crt');
+        $this->copyDockerFile(__DIR__ . '/stubs/localhost.key', 'localhost.key');
     }
 
     /**
