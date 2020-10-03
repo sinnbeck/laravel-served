@@ -32,6 +32,6 @@ class ServedName
 
     public function getProjectFolderName(): string
     {
-        return Str::afterLast(base_path(), '/');
+        return basename(base_path());
     }
 }
