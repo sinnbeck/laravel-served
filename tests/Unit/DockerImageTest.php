@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use Symfony\Component\Console\Output\OutputInterface;
 use Tests\TestCase;
 use Sinnbeck\LaravelServed\Shell\Shell;
 use Sinnbeck\LaravelServed\Images\PhpImage;
