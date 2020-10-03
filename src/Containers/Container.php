@@ -2,6 +2,7 @@
 
 namespace Sinnbeck\LaravelServed\Containers;
 
+use Illuminate\Support\Str;
 use Sinnbeck\LaravelServed\Exceptions\TtyNotSupportedException;
 use Sinnbeck\LaravelServed\Shell\Shell;
 use Sinnbeck\LaravelServed\Traits\Storage;
@@ -65,7 +66,10 @@ abstract class Container
 
     public function getDockerRunCommand()
     {
-        return 'docker run -d --restart always ' . $this->dockerRunCommand . ' "${:image_name}"';
+
+        $command = $this->isWindows() ? str_replace('\\', '', $this->dockerRunCommand) : $this->dockerRunCommand;
+
+        return 'docker run -d --restart always ' . $command . ' "${:image_name}"';
     }
 
     public function getEnv()
@@ -263,6 +267,11 @@ abstract class Container
     protected function makeImageName(): string
     {
         return sprintf('served/%s_%s', $this->projectName(), $this->name());
+    }
+
+    protected function isWindows()
+    {
+        return Str::startsWith(PHP_OS,'WIN');
     }
 
 }
