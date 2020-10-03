@@ -4,13 +4,15 @@ namespace Sinnbeck\LaravelServed\Commands;
 
 use Exception;
 use Illuminate\Console\Command;
+use Sinnbeck\LaravelServed\Commands\Traits\BindOutputToApp;
 use Sinnbeck\LaravelServed\Commands\Traits\DockerCheck;
 use Sinnbeck\LaravelServed\Docker\Docker;
 use Sinnbeck\LaravelServed\ServiceManager;
 
 class ServedStopCommand extends Command
 {
-    use DockerCheck;
+    use BindOutputToApp,
+        DockerCheck;
 
     /**
      * The name and signature of the console command.
