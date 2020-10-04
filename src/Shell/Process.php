@@ -11,8 +11,7 @@ class Process extends BaseProcess
     {
         $env += $this->internal_getDefaultEnv();
 
-        $command = $this->privateMethod($this, 'replacePlaceholders')->invoke($this, $command, $env);
-        return $command;
+        return $this->internal_replacePlaceholders($command, $env);
     }
 
     protected function internal_getDefaultEnv() {
@@ -20,7 +19,7 @@ class Process extends BaseProcess
     }
 
     protected function internal_replacePlaceholders($command, $env = []) {
-        return $this->privateMethod($this, 'replacePlaceholders')->invoke($this);
+        return $this->privateMethod($this, 'replacePlaceholders')->invoke($this, $command, $env);
     }
 
     private function privateMethod($object, $method) {
