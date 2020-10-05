@@ -4,11 +4,14 @@ namespace Sinnbeck\LaravelServed\Commands;
 
 use Exception;
 use Illuminate\Console\Command;
+use Sinnbeck\LaravelServed\Commands\Traits\BindOutputToApp;
 use Sinnbeck\LaravelServed\Exceptions\TtyNotSupportedException;
 use Sinnbeck\LaravelServed\ServiceManager;
 
 class ServedSshCommand extends Command
 {
+    use BindOutputToApp;
+
     /**
      * The name and signature of the console command.
      *
