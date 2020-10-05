@@ -4,6 +4,7 @@ namespace Sinnbeck\LaravelServed\Commands;
 
 use Exception;
 use Illuminate\Console\Command;
+use Sinnbeck\LaravelServed\Commands\Traits\BindOutputToApp;
 use Sinnbeck\LaravelServed\Commands\Traits\PortCheck;
 use Sinnbeck\LaravelServed\Commands\Traits\DockerCheck;
 use Sinnbeck\LaravelServed\Commands\Traits\RunningConfig;
@@ -13,7 +14,8 @@ use Sinnbeck\LaravelServed\Exceptions\PortAlreadyInUseException;
 
 class ServedStartCommand extends Command
 {
-    use DockerCheck,
+    use BindOutputToApp,
+        DockerCheck,
         PortCheck,
         RunningConfig;
 

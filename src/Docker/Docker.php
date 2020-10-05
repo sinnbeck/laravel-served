@@ -19,7 +19,6 @@ class Docker
     /**
      * Docker constructor.
      * @param Shell $shell
-     * @param ConsoleOutput $consoleOutput
      */
     public function __construct(Shell $shell)
     {
