@@ -59,7 +59,7 @@ class PhpImage extends Image
         $command
             ->comment('Installing packages for sql dump')
             ->run([
-                'RUN set -ex;',
+                'set -ex;',
                 'key=\'A4A9406876FCBD3C456770C88C718D3B5072E1F5\';',
                 'export GNUPGHOME="$(mktemp -d)";',
                 'gpg --batch --keyserver ha.pool.sks-keyservers.net --recv-keys "$key";',
