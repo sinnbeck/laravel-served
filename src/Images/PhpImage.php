@@ -88,12 +88,10 @@ class PhpImage extends Image
                 'mkdir -p /home/served/.composer',
                 'chown -R served:served /home/served'
             ])
-            ->comment('set new user to run php-fpm')
-            ->comment("add composer\nset composer to use https\nadd prestissimo run composer in parallel", true)
+            ->comment("add composer\nset composer to use https", true)
             ->run([
                 'curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer',
                 'runuser -l served -c "composer config --global repos.packagist composer https://packagist.org"',
-                'runuser -l served -c "composer global require hirak/prestissimo"'
             ]);
 
         if (Arr::get($this->config, 'npm', false)) {
