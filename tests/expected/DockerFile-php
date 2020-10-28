@@ -31,14 +31,11 @@ ARG uid
 RUN useradd -G root -u $uid -d /home/served served \
     && mkdir -p /home/served/.composer \
     && chown -R served:served /home/served
-# set new user to run php-fpm
 
 # add composer
 # set composer to use https
-# add prestissimo run composer in parallel
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer \
-    && runuser -l served -c "composer config --global repos.packagist composer https://packagist.org" \
-    && runuser -l served -c "composer global require hirak/prestissimo"
+    && runuser -l served -c "composer config --global repos.packagist composer https://packagist.org"
 
 # Set work dir
 WORKDIR /app
