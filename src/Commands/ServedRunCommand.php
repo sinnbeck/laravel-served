@@ -11,6 +11,7 @@ use Sinnbeck\LaravelServed\Commands\Traits\RunningConfig;
 use Sinnbeck\LaravelServed\Docker\Docker;
 use Sinnbeck\LaravelServed\ServiceManager;
 use Sinnbeck\LaravelServed\Exceptions\PortAlreadyInUseException;
+use Sinnbeck\LaravelServed\Exceptions\ShellCommandFailedException;
 
 class ServedRunCommand extends Command
 {
@@ -70,14 +71,20 @@ class ServedRunCommand extends Command
 
         $serviceList = $manager->loadServices();
 
-        foreach ($serviceList as $service) {
-            if ($onlyService && $service->name() !== $onlyService) {
-                continue;
-            }
-            $this->info(sprintf('Starting %s (%s) ...', $service->name(), $service->imageName()));
-            $service->container()->remove();
-            $service->container()->run();
+        try {
+            foreach ($serviceList as $service) {
+                if ($onlyService && $service->name() !== $onlyService) {
+                    continue;
+                }
+                $this->info(sprintf('Starting %s (%s) ...', $service->name(), $service->imageName()));
+                $service->container()->remove();
+                $service->container()->run();
 
+            }
+
+        } catch (ShellCommandFailedException $exception) {
+            $this->error($exception->getMessage());
+            return 1;
         }
         $this->line('');
         $this->servedRunning($manager);

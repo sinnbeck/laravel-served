@@ -4,6 +4,7 @@ namespace Sinnbeck\LaravelServed\Shell;
 
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Exception\ProcessFailedException;
+use Sinnbeck\LaravelServed\Exceptions\ShellCommandFailedException;
 
 class Shell
 {
@@ -69,7 +70,8 @@ class Shell
     protected function writeOutputBuffer() {
         return function ($type, $buffer) {
             if (Process::ERR === $type) {
-                $this->output->writeln('ERROR : ' . $buffer);
+                throw new ShellCommandFailedException('ERROR : : ' . trim($buffer));
+//                $this->output->writeln('ERROR : ' . $buffer);
             } else {
                 $this->output->writeln($buffer);
             }

@@ -11,6 +11,7 @@ use Sinnbeck\LaravelServed\Commands\Traits\RunningConfig;
 use Sinnbeck\LaravelServed\Docker\Docker;
 use Sinnbeck\LaravelServed\ServiceManager;
 use Sinnbeck\LaravelServed\Exceptions\PortAlreadyInUseException;
+use Sinnbeck\LaravelServed\Exceptions\ShellCommandFailedException;
 
 class ServedUpCommand extends Command
 {
@@ -71,23 +72,29 @@ class ServedUpCommand extends Command
         $noCache = $this->option('no-cache');
         $serviceList = $manager->loadServices();
 
-        foreach ($serviceList as $service) {
-            if ($onlyService && $service->name() !== $onlyService) {
-                continue;
+        try {
+            foreach ($serviceList as $service) {
+                if ($onlyService && $service->name() !== $onlyService) {
+                    continue;
+                }
+
+                $this->info(sprintf('Building %s (%s) ...', $service->name(), $service->imageName()));
+                $service->build($noCache);
+
             }
 
-            $this->info(sprintf('Building %s (%s) ...', $service->name(), $service->imageName()));
-            $service->build($noCache);
+            foreach ($serviceList as $service) {
+                if ($onlyService && $service->name() !== $onlyService) {
+                    continue;
+                }
+                $this->info(sprintf('Starting %s (%s) ...', $service->name(), $service->imageName()));
+                $service->run();
 
-        }
-
-        foreach ($serviceList as $service) {
-            if ($onlyService && $service->name() !== $onlyService) {
-                continue;
             }
-            $this->info(sprintf('Starting %s (%s) ...', $service->name(), $service->imageName()));
-            $service->run();
 
+        } catch (ShellCommandFailedException $exception) {
+            $this->error($exception->getMessage());
+            return 1;
         }
 
         $this->servedRunning($manager);
