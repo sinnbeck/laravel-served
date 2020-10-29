@@ -36,8 +36,7 @@ class PostgresImage extends Image
      */
     public function writeDockerFile(): string
     {
-        $command = $this->dockerFileBuilder
-            ->from($this->imageName(), $this->imageTag())
+        $command = $this->getBaseDockerFile()
             ->newLine()
             ->comment('Setting env vars for postgres init')
             ->env('POSTGRES_DB', 'laravel')

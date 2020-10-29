@@ -49,8 +49,7 @@ class ApacheImage extends Image
      */
     public function writeDockerFile(): string
     {
-        $command = $this->dockerFileBuilder
-            ->from($this->imageName(), $this->tag)
+        $command = $this->getBaseDockerFile()
             ->env('WEB_PHP_SOCKET', 'served_php:9000')
             ->env('WEB_DOCUMENT_ROOT', '/app/public')
             ->env('WEB_PHP_TIMEOUT', '60')
@@ -58,5 +57,11 @@ class ApacheImage extends Image
             ->copy($this->storageDirectory(true) . 'localhost.crt', '/opt/docker/etc/httpd/ssl/server.crt');
 
         return (string)$command;
+
+    }
+
+    public function imageTag(): string
+    {
+        return $this->tag;
     }
 }

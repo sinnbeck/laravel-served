@@ -83,6 +83,21 @@ abstract class Image implements ImageInterface
         return $this;
     }
 
+    protected function getBaseDockerFile()
+    {
+        $command = $this->dockerFileBuilder->from($this->imageName(), $this->imageTag());
+
+        if ($proxyHttp = config('served.proxy.http', false)) {
+            $command->env('http_proxy', $proxyHttp);
+        }
+
+        if ($proxyHttps = config('served.proxy.https', false)) {
+            $command->env('http_proxy', $proxyHttps);
+        }
+
+        return $command;
+    }
+
     /**
      * @return void
      */
@@ -103,9 +118,17 @@ abstract class Image implements ImageInterface
      * @param boolean $noCache
      * @return void
      */
-    public function build($noCache = false): void
+    public function build($noCache): void
     {
-        $this->shell->run($this->buildCommand . ($noCache ? $this->buildFlags : ''), $this->prepareEnv());
+        $this->shell->run(
+            $this->prepareBuildCommand($noCache),
+            $this->prepareEnv()
+        );
+    }
+
+    protected function prepareBuildCommand($noCache)
+    {
+        return $this->buildCommand . ($noCache ? $this->buildFlags : '');
     }
 
     /**

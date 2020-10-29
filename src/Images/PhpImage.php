@@ -43,38 +43,43 @@ class PhpImage extends Image
      */
     public function writeDockerFile(): string
     {
+        $command = $this->getBaseDockerFile();
+
+        $command->comment('disable warnings for "dangerous" messages', true)
+            ->env('APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE', '1');
+
         $runInstalls = [
             'apt-get update',
             'apt-get install -y unzip zip gnupg',
             'rm -rf /var/lib/apt/lists/*',
         ];
 
-
-        $command = $this->dockerFileBuilder->from($this->imageName(), $this->imageTag())
-            ->comment('disable warnings for "dangerous" messages', true)
-            ->env('APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE', '1')
+        $command
             ->comment('Adding linux packages', true)
             ->run($runInstalls);
 
-        $command
-            ->comment('Installing packages for sql dump')
-            ->run([
-                'set -ex;',
-                'key=\'A4A9406876FCBD3C456770C88C718D3B5072E1F5\';',
-                'export GNUPGHOME="$(mktemp -d)";',
-                'gpg --batch --keyserver ha.pool.sks-keyservers.net --recv-keys "$key";',
-                'gpg --batch --export "$key" > /etc/apt/trusted.gpg.d/mysql.gpg;',
-                'gpgconf --kill all;',
-                'rm -rf "$GNUPGHOME";',
-                'apt-key list > /dev/null',
-            ], '')
-            ->newLine()
-            ->run([
-                'echo "deb http://repo.mysql.com/apt/debian/ buster mysql-8.0" > /etc/apt/sources.list.d/mysql.list',
-                'apt-get update',
-                'apt-get install -y mysql-community-client postgresql-client sqlite3',
-                'rm -rf /var/lib/apt/lists/*'
-            ]);
+        if (!config('served.proxy.http', false) && !config('served.proxy.https', false)) {
+            $command
+                ->comment('Installing packages for sql dump')
+                ->run([
+                    'set -ex;',
+                    'key=\'A4A9406876FCBD3C456770C88C718D3B5072E1F5\';',
+                    'export GNUPGHOME="$(mktemp -d)";',
+                    'gpg --batch --keyserver ha.pool.sks-keyservers.net --recv-keys "$key";',
+                    'gpg --batch --export "$key" > /etc/apt/trusted.gpg.d/mysql.gpg;',
+                    'gpgconf --kill all;',
+                    'rm -rf "$GNUPGHOME";',
+                    'apt-key list > /dev/null',
+                ], '')
+                ->newLine()
+                ->run([
+                    'echo "deb http://repo.mysql.com/apt/debian/ buster mysql-8.0" > /etc/apt/sources.list.d/mysql.list',
+                    'apt-get update',
+                    'apt-get install -y mysql-community-client postgresql-client sqlite3',
+                    'rm -rf /var/lib/apt/lists/*'
+                ]);
+
+        }
 
         $command
             ->comment('add development php.ini file', true)

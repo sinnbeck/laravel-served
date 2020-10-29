@@ -7,7 +7,7 @@ interface ImageInterface
     /**
      * @return void
      */
-    public function build(): void;
+    public function build($noCache): void;
 
     /**
      * @return string

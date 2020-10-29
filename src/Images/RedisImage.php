@@ -44,12 +44,9 @@ class RedisImage extends Image
      */
     public function writeDockerFile(): string
     {
-        $command = $this->dockerFileBuilder
-            ->from($this->imageName(), $this->imageTag())
-            //->copy('redis.conf', '/usr/local/etc/redis/redis.conf')
-            //->cmd(['redis-server', '/usr/local/etc/redis/redis.conf']);
+        $command = $this->getBaseDockerFile()
             ->cmd(['redis-server']);
 
-        return (string)$command;
+        return (string) $command;
     }
 }
