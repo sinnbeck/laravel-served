@@ -58,28 +58,31 @@ class PhpImage extends Image
             ->comment('Adding linux packages', true)
             ->run($runInstalls);
 
-        if (!config('served.proxy.http', false) && !config('served.proxy.https', false)) {
-            $command
-                ->comment('Installing packages for sql dump')
-                ->run([
-                    'set -ex;',
-                    'key=\'A4A9406876FCBD3C456770C88C718D3B5072E1F5\';',
-                    'export GNUPGHOME="$(mktemp -d)";',
-                    'gpg --batch --keyserver ha.pool.sks-keyservers.net --recv-keys "$key";',
-                    'gpg --batch --export "$key" > /etc/apt/trusted.gpg.d/mysql.gpg;',
-                    'gpgconf --kill all;',
-                    'rm -rf "$GNUPGHOME";',
-                    'apt-key list > /dev/null',
-                ], '')
-                ->newLine()
-                ->run([
-                    'echo "deb http://repo.mysql.com/apt/debian/ buster mysql-8.0" > /etc/apt/sources.list.d/mysql.list',
-                    'apt-get update',
-                    'apt-get install -y mysql-community-client postgresql-client sqlite3',
-                    'rm -rf /var/lib/apt/lists/*'
-                ]);
-
+        $gpgOptions = '';
+        if ($proxyHttp = config('served.proxy.http', false)) {
+            $gpgOptions .= '-keyserver-options http-proxy=${http_proxy}';
         }
+
+        $command
+            ->comment('Installing packages for sql dump')
+            ->run([
+                'set -ex;',
+                'key=\'8C718D3B5072E1F5\';',
+                'export GNUPGHOME="$(mktemp -d)";',
+                'gpg --batch ' . $gpgOptions . ' --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys "$key";',
+                'gpg --batch --export "$key" > /etc/apt/trusted.gpg.d/mysql.gpg;',
+                'gpgconf --kill all;',
+                'rm -rf "$GNUPGHOME";',
+                'apt-key list > /dev/null',
+            ], '')
+            ->newLine()
+            ->run([
+                'echo "deb http://repo.mysql.com/apt/debian/ buster mysql-8.0" > /etc/apt/sources.list.d/mysql.list',
+                'apt-get update',
+                'apt-get install -y mysql-community-client postgresql-client sqlite3',
+                'rm -rf /var/lib/apt/lists/*'
+            ]);
+
 
         $command
             ->comment('add development php.ini file', true)
@@ -116,6 +119,11 @@ class PhpImage extends Image
         }
 
         if ($modules) {
+            if ($proxyHttp = config('served.proxy.http', false)) {
+                $command
+                    ->comment('setting proxy for pear')
+                    ->run('pear config-set http_proxy ${http_proxy}');
+            }
             $command
                 ->comment('Adding php packages', true)
                 ->copy('/usr/bin/install-php-extensions', '/usr/bin/', 'mlocati/php-extension-installer')
