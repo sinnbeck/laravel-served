@@ -43,26 +43,33 @@ class PhpImage extends Image
      */
     public function writeDockerFile(): string
     {
+        $command = $this->getBaseDockerFile();
+
+        $command->comment('disable warnings for "dangerous" messages', true)
+            ->env('APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE', '1');
+
         $runInstalls = [
             'apt-get update',
             'apt-get install -y unzip zip gnupg',
             'rm -rf /var/lib/apt/lists/*',
         ];
 
-
-        $command = $this->dockerFileBuilder->from($this->imageName(), $this->imageTag())
-            ->comment('disable warnings for "dangerous" messages', true)
-            ->env('APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE', '1')
+        $command
             ->comment('Adding linux packages', true)
             ->run($runInstalls);
+
+        $gpgOptions = '';
+        if ($proxyHttp = config('served.proxy.http', false)) {
+            $gpgOptions .= '--keyserver-options http-proxy=${http_proxy}';
+        }
 
         $command
             ->comment('Installing packages for sql dump')
             ->run([
                 'set -ex;',
-                'key=\'A4A9406876FCBD3C456770C88C718D3B5072E1F5\';',
+                'key=\'8C718D3B5072E1F5\';',
                 'export GNUPGHOME="$(mktemp -d)";',
-                'gpg --batch --keyserver ha.pool.sks-keyservers.net --recv-keys "$key";',
+                'gpg --batch ' . $gpgOptions . ' --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys "$key";',
                 'gpg --batch --export "$key" > /etc/apt/trusted.gpg.d/mysql.gpg;',
                 'gpgconf --kill all;',
                 'rm -rf "$GNUPGHOME";',
@@ -75,6 +82,7 @@ class PhpImage extends Image
                 'apt-get install -y mysql-community-client postgresql-client sqlite3',
                 'rm -rf /var/lib/apt/lists/*'
             ]);
+
 
         $command
             ->comment('add development php.ini file', true)
@@ -111,6 +119,11 @@ class PhpImage extends Image
         }
 
         if ($modules) {
+            if ($proxyHttp = config('served.proxy.http', false)) {
+                $command
+                    ->comment('setting proxy for pear')
+                    ->run('pear config-set http_proxy ${http_proxy}');
+            }
             $command
                 ->comment('Adding php packages', true)
                 ->copy('/usr/bin/install-php-extensions', '/usr/bin/', 'mlocati/php-extension-installer')

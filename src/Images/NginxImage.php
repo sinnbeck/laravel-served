@@ -46,8 +46,7 @@ class NginxImage extends Image
      */
     public function writeDockerFile(): string
     {
-        $command = $this->dockerFileBuilder
-            ->from($this->imageName(), $this->imageTag())
+        $command = $this->getBaseDockerFile()
             ->newLine()
             ->comment('Copy in new nginx config')
 //            ->copy('storage/served/nginx/default.conf', '/etc/nginx/conf.d/default.conf');

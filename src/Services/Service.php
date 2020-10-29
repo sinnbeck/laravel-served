@@ -45,11 +45,13 @@ abstract class Service implements ServiceInterface
     }
 
     /**
+     * @param bool $noCache
+     *
      * @return void
      */
-    public function build(): void
+    public function build($noCache = false): void
     {
-        $this->image()->prepareBuild()->build();
+        $this->image()->prepareBuild()->build($noCache);
     }
 
     /**

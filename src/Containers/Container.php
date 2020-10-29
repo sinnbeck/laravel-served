@@ -69,7 +69,21 @@ abstract class Container
 
         $command = $this->isWindows() ? str_replace('\\', '', $this->dockerRunCommand) : $this->dockerRunCommand;
 
-        return 'docker run -d --restart always ' . $command . ' "${:image_name}"';
+        return 'docker run -d --restart always ' . $command . $this->getProxySettings() . ' "${:image_name}"';
+    }
+
+    protected function getProxySettings()
+    {
+        $envString = '';
+        if ($proxyHttp = config('served.proxy.http', false)) {
+            $envString .= ' --env=HTTP_PROXY="' . $proxyHttp . '"';
+        }
+
+        if ($proxyHttps = config('served.proxy.https', false)) {
+            $envString .= ' --env=HTTPS_PROXY="' . $proxyHttps . '"';
+        }
+
+        return $envString;
     }
 
     public function getEnv()

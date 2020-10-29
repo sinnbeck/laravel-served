@@ -43,9 +43,6 @@ class MemcachedImage extends Image
      */
     public function writeDockerFile(): string
     {
-        $command = $this->dockerFileBuilder
-            ->from($this->imageName(), $this->imageTag());
-
-        return (string)$command;
+        return (string) $this->getBaseDockerFile();
     }
 }

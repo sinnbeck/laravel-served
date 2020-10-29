@@ -12,6 +12,16 @@ return [
     */
     'name' => env('SERVED_NAME'),
 
+    /**
+     * If you are behind a proxy, you might need to
+     * specify this to enable docker to gain access
+     * to the internet while building your images
+     */
+    'proxy' => [
+        'http' => env('SERVED_HTTP_PROXY', ''),
+        'https' => env('SERVED_HTTPS_PROXY', ''),
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | PHP Server

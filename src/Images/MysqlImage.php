@@ -37,8 +37,7 @@ class MysqlImage extends Image
      */
     public function writeDockerFile(): string
     {
-        $command = $this->dockerFileBuilder
-            ->from($this->imageName(), $this->imageTag())
+        $command = $this->getBaseDockerFile()
             ->newLine()
             ->comment('Setting env vars for mysql init')
             ->env('MYSQL_ROOT_PASSWORD', 'password')
