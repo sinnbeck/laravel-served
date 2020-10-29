@@ -92,7 +92,7 @@ abstract class Image implements ImageInterface
         }
 
         if ($proxyHttps = config('served.proxy.https', false)) {
-            $command->env('http_proxy', $proxyHttps);
+            $command->env('https_proxy', $proxyHttps);
         }
 
         return $command;
