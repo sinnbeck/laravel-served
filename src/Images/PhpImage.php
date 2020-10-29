@@ -60,7 +60,7 @@ class PhpImage extends Image
 
         $gpgOptions = '';
         if ($proxyHttp = config('served.proxy.http', false)) {
-            $gpgOptions .= '-keyserver-options http-proxy=${http_proxy}';
+            $gpgOptions .= '--keyserver-options http-proxy=${http_proxy}';
         }
 
         $command
