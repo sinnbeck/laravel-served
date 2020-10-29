@@ -69,7 +69,7 @@ abstract class Container
 
         $command = $this->isWindows() ? str_replace('\\', '', $this->dockerRunCommand) : $this->dockerRunCommand;
 
-        return 'docker run -d --restart always ' . $command . ' "${:image_name}"' . $this->getProxySettings();
+        return 'docker run -d --restart always ' . $command . $this->getProxySettings() . ' "${:image_name}"';
     }
 
     protected function getProxySettings()
