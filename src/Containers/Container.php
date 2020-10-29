@@ -76,11 +76,11 @@ abstract class Container
     {
         $envString = '';
         if ($proxyHttp = config('served.proxy.http', false)) {
-            $envString .= ' --env=HTTP_PROXY=' . $proxyHttp;
+            $envString .= ' --env=HTTP_PROXY="' . $proxyHttp . '"';
         }
 
         if ($proxyHttps = config('served.proxy.https', false)) {
-            $envString .= ' --env=HTTPS_PROXY=' . $proxyHttps;
+            $envString .= ' --env=HTTPS_PROXY="' . $proxyHttps . '"';
         }
 
         return $envString;
