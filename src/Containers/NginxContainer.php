@@ -17,7 +17,7 @@ class NginxContainer extends Container
         --network="${:network}" \
         -p="${:port}":80 \
         -p="${:ssl_port}":443 \
-        -v="${:local_dir}":/app';
+        -v="${:local_dir}":/app:delegated';
 
     /**
      * @return array
