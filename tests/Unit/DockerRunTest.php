@@ -31,7 +31,7 @@ class DockerRunTest extends TestCase
         --network="${:network}" \
         -p="${:port}":80 \
         -p="${:ssl_port}":443 \
-        -v="${:local_dir}":/app "${:image_name}"';
+        -v="${:local_dir}":/app:cached "${:image_name}"';
 
         $this->assertEquals($expected, $container->getDockerRunCommand());
 
@@ -65,7 +65,7 @@ class DockerRunTest extends TestCase
         --network="${:network}" \
         -p="${:port}":80 \
         -p="${:ssl_port}":443 \
-        -v="${:local_dir}":/app "${:image_name}"';
+        -v="${:local_dir}":/app:cached "${:image_name}"';
 
         $this->assertEquals($expected, $container->getDockerRunCommand());
 
@@ -99,7 +99,7 @@ class DockerRunTest extends TestCase
         --user=served:served \
         --network="${:network}" \
         --network-alias=served_php \
-        -v="${:local_dir}":/app -v="/some/local/path:/some/docker/path" "${:image_name}"';
+        -v="${:local_dir}":/app:cached -v="/some/local/path:/some/docker/path" "${:image_name}"';
 
         $this->assertEquals($expected, $container->getDockerRunCommand());
 
