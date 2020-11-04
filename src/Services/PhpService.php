@@ -29,4 +29,14 @@ class PhpService extends Service
     {
         return new PhpImage($this->name, $this->config, $this->shell);
     }
+
+    public function enableXdebug(): void
+    {
+        $this->container()->enableXdebug();
+    }
+
+    public function disableXdebug(): void
+    {
+        $this->container()->enableXdebug();
+    }
 }

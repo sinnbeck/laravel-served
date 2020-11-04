@@ -8,6 +8,7 @@ use Sinnbeck\LaravelServed\Commands\ServedListCommand;
 use Sinnbeck\LaravelServed\Commands\ServedSshCommand;
 use Sinnbeck\LaravelServed\Commands\ServedStartCommand;
 use Sinnbeck\LaravelServed\Commands\ServedStopCommand;
+use Sinnbeck\LaravelServed\Commands\ServedXdebugCommand;
 use Sinnbeck\LaravelServed\Commands\ServedTearDownCommand;
 use Sinnbeck\LaravelServed\Commands\ServedUpCommand;
 
@@ -45,6 +46,7 @@ class ServedServiceProvider extends ServiceProvider
                 ServedTearDownCommand::class,
                 ServedListCommand::class,
                 ServedSshCommand::class,
+                ServedXdebugCommand::class,
             ]);
         }
 
