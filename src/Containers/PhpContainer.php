@@ -11,7 +11,9 @@ class PhpContainer extends Container
         --user=served:served \
         --network="${:network}" \
         --network-alias=served_php \
-        -v="${:local_dir}":/app:cached';
+        -v="${:local_dir}":/app:cached \
+        -v=/app/vendor \
+        -v=/app/storage';
 
     public function __construct(string $name, $config, Shell $shell)
     {

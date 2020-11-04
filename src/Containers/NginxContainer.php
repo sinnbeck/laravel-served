@@ -17,7 +17,7 @@ class NginxContainer extends Container
         --network="${:network}" \
         -p="${:port}":80 \
         -p="${:ssl_port}":443 \
-        -v="${:local_dir}":/app:cached';
+        -v="${:local_dir}":/app/public:cached';
 
     /**
      * @return array
@@ -30,7 +30,7 @@ class NginxContainer extends Container
             'image_name' => $this->makeImageName(),
             'port' => $this->port(),
             'ssl_port' => $this->sslPort(),
-            'local_dir' => base_path(),
+            'local_dir' => base_path('public'),
         ];
     }
 }

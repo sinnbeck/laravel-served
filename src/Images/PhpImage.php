@@ -94,7 +94,13 @@ class PhpImage extends Image
             ->run([
                 'useradd -G root -u $uid -d /home/served served',
                 'mkdir -p /home/served/.composer',
-                'chown -R served:served /home/served'
+                'chown -R served:served /home/served',
+                'mkdir -p /app/storage/framework/sessions',
+                'mkdir -p /app/storage/framework/views',
+                'mkdir -p /app/storage/framework/cache',
+                'mkdir -p /app/vendor',
+                'chown -R served:served /app/storage',
+                'chown -R served:served /app/vendor',
             ])
             ->comment("add composer\nset composer to use https", true)
             ->run([
