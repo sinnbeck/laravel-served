@@ -21,7 +21,7 @@ class ServedXdebugCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'served:xdebug {flag=enable}';
+    protected $signature = 'served:xdebug {flag?}';
 
     /**
      * The console command description.
@@ -58,6 +58,11 @@ class ServedXdebugCommand extends Command
         }
 
         $argument = $this->argument('flag');
+        if (!$argument) {
+            $argument = $this->choice('Do you want to enable or disable?', ['enable', 'disable'], 0);
+
+        }
+
         if ($argument == 'enable') {
             try {
                 $service->enableXdebug();

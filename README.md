@@ -98,7 +98,7 @@ Here you may specify how php should be built. Any options left blank or removed 
         ],
         'npm' => true, //enable or disable npm in build
         'xdebug' => [
-            'enabled' => true,
+            'enabled' => env('SERVED_XDEBUG_ENABLED', true),
             'port' => 9001,
         ],
     ],
@@ -107,6 +107,25 @@ Here you may specify how php should be built. Any options left blank or removed 
 The array of modules can be filled with any module found in the url below (except parallel, pthreads and tdlib) 
 
 https://github.com/mlocati/docker-php-extension-installer
+
+#### Xdebug
+It is suggested to install xdebug to make debugging easier. To install it and set it up, simple make sure it is set as enabled in the config, while running `php artisan served:up php`
+
+As Xdebug can slow down requests, it is possible to quickly turn it off and on, when needed.
+
+Enable Xdebug
+```
+$ php artisan served:xdebug enable
+```
+Disable Xdebug
+```
+$ php artisan served:xdebug disable
+```
+Interactive toggle Xdebug
+```
+$ php artisan served:xdebug
+```
+Be aware that you need to run `php artisan served:up php` again if you decide to enable Xdebug in the config. It isn't possible to toggle it on an off if it isn't installed in the first place.
 
 ### Web
 Served currently supports nginx and apache. Simply service to whichever you want to use, and set the correct version (or delete the version to have served use a sensible default). Apache currently only supports the latest version and will ignore any version set.

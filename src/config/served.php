@@ -44,7 +44,7 @@ return [
         ],
         'npm' => true,
         'xdebug' => [
-            'enabled' => true,
+            'enabled' => env('SERVED_XDEBUG_ENABLED', true),
             'port' => 9001,
         ],
     ],
