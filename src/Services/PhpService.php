@@ -37,6 +37,6 @@ class PhpService extends Service
 
     public function disableXdebug(): void
     {
-        $this->container()->enableXdebug();
+        $this->container()->disableXdebug();
     }
 }
