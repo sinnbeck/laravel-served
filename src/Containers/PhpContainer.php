@@ -46,4 +46,22 @@ class PhpContainer extends Container
             return '-v="' . $item . '"';
         })->implode(' ');
     }
+
+    public function enableXdebug(): void
+    {
+        $this->shell->exec('docker exec --user root ' . $this->makeContainerName() . ' mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.old /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini');
+        $this->kill();
+    }
+
+    public function disableXdebug(): void
+    {
+        $this->shell->exec('docker exec --user root ' . $this->makeContainerName() . ' mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.old');
+        $this->kill();
+    }
+
+    public function kill(): void
+    {
+        $this->shell->exec('docker exec --user root ' . $this->makeContainerName() . ' /bin/bash -c "kill USR2 1"');
+
+    }
 }
